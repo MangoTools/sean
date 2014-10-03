@@ -1,7 +1,13 @@
 'use strict';
 
 module.exports = {
-	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/mean',
+    db: {
+        dbName: process.env.DBNAME  || 'sean-prod',
+        username : process.env.DBUSER  || 'SeanDB',
+        password : process.env.DBPASSWORD || 'HU7XQQBNWq',
+        dialect: "postgres", // 'sqlite', 'postgres', 'mariadb','mysql'
+        port : 5432 //    5432 for postgres, 3306 for mysql and mariaDB ,
+    },
 	assets: {
 		lib: {
 			css: [

@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 var express = require('express'),
+    http = require('http'),
+    socketio = require('socket.io'),
 	morgan = require('morgan'),
 	bodyParser = require('body-parser'),
 	session = require('express-session'),
@@ -12,17 +14,28 @@ var express = require('express'),
 	cookieParser = require('cookie-parser'),
 	helmet = require('helmet'),
 	passport = require('passport'),
-	mongoStore = require('connect-mongo')({
-		session: session
-	}),
+    sequelizeStore = require('connect-session-sequelize')(session.Store),
 	flash = require('connect-flash'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
 	path = require('path');
 
 module.exports = function(db) {
-	// Initialize express app
-	var app = express();
+    // Initialize express app
+    var app = express();
+    var server = http.createServer(app);
+    var io = socketio.listen(server);
+
+
+    app.set('socketio', io);
+    app.set('server', server);
+
+    // synchronise Database
+    db.sync({ force: false }).complete(function(err) {
+            if (err) {
+                throw err[0]
+            }
+        });
 
 	// Globbing model files
 	config.getGlobbedFiles('./app/models/**/*.js').forEach(function(modelPath) {
@@ -85,14 +98,13 @@ module.exports = function(db) {
 	// CookieParser should be above session
 	app.use(cookieParser());
 
-	// Express MongoDB session storage
+	// Express SQL session storage
 	app.use(session({
 		saveUninitialized: true,
 		resave: true,
 		secret: config.sessionSecret,
-		store: new mongoStore({
-			db: db.connection.db,
-			collection: config.sessionCollection
+		store: new sequelizeStore({
+			db: db
 		})
 	}));
 
@@ -139,6 +151,8 @@ module.exports = function(db) {
 			error: 'Not Found'
 		});
 	});
+
+
 
 	return app;
 };

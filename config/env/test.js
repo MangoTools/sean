@@ -1,10 +1,16 @@
 'use strict';
 
 module.exports = {
-	db: 'mongodb://localhost/mean-test',
+    db: {
+        dbName: 'sean-test',
+        username : 'SeanDB',
+        password : 'HU7XQQBNWq',
+        dialect: "postgres", // 'sqlite', 'postgres', 'mariadb','mysql'
+        port : 5432 //    5432 for postgres, 3306 for mysql and mariaDB ,
+    },
 	port: 3001,
 	app: {
-		title: 'MEAN.JS - Test Environment'
+		title: 'SEAN - Test Environment'
 	},
 	facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',

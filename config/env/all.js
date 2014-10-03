@@ -2,13 +2,13 @@
 
 module.exports = {
 	app: {
-		title: 'MEAN.JS',
-		description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
-		keywords: 'mongodb, express, angularjs, node.js, mongoose, passport'
+		title: 'SEAN',
+		description: 'Full-Stack JavaScript with SQL Express, AngularJS, and Node.js',
+		keywords: 'SQL, express, angularjs, node.js, sequelize, passport'
 	},
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',
-	sessionSecret: 'MEAN',
+	sessionSecret: 'SEAN - Need to be Changed',
 	sessionCollection: 'sessions',
 	assets: {
 		lib: {
