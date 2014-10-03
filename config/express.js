@@ -6,7 +6,6 @@
 var express = require('express'),
     http = require('http'),
     socketio = require('socket.io'),
-	morgan = require('morgan'),
 	bodyParser = require('body-parser'),
 	session = require('express-session'),
 	compress = require('compression'),
@@ -67,9 +66,6 @@ module.exports = function() {
 
 	// Environment dependent middleware
 	if (process.env.NODE_ENV === 'development') {
-		// Enable logger (morgan)
-		app.use(morgan('dev'));
-
 		// Disable views cache
 		app.set('view cache', false);
 	} else if (process.env.NODE_ENV === 'production') {
