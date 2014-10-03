@@ -14,13 +14,15 @@ var express = require('express'),
 	cookieParser = require('cookie-parser'),
 	helmet = require('helmet'),
 	passport = require('passport'),
+    db = require('./sequelize'),
     sequelizeStore = require('../app/helpers/sequelizeStore.server.js')(session.Store),
 	flash = require('connect-flash'),
 	config = require('./config'),
+
 	consolidate = require('consolidate'),
 	path = require('path');
 
-module.exports = function(db) {
+module.exports = function() {
     // Initialize express app
     var app = express();
     var server = http.createServer(app);
@@ -30,17 +32,6 @@ module.exports = function(db) {
     app.set('socketio', io);
     app.set('server', server);
 
-    // synchronise Database
-    db.sync({ force: false ,logging:false }).complete(function(err) {
-            if (err) {
-                throw err[0]
-            }
-        });
-
-	// Globbing model files
-	config.getGlobbedFiles('./app/models/**/*.js').forEach(function(modelPath) {
-		require(path.resolve(modelPath));
-	});
 
 	// Setting application local variables
 	app.locals.title = config.app.title;

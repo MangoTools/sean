@@ -1,12 +1,17 @@
 'use strict';
 
+var path = require('path'),
+    rootPath = path.normalize(__dirname + '/../..');
+
 module.exports = {
 	app: {
 		title: 'SEAN',
 		description: 'Full-Stack JavaScript with SQL Express, AngularJS, and Node.js',
 		keywords: 'SQL, express, angularjs, node.js, sequelize, passport'
 	},
+    root: rootPath,
 	port: process.env.PORT || 3000,
+    modelsDir : rootPath + '/app/models',
 	templateEngine: 'swig',
 	sessionSecret: 'SEAN - Need to be Changed',
 	sessionCollection: 'sessions',

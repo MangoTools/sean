@@ -14,23 +14,10 @@ var init = require('./config/init')(),
 
 // Bootstrap db connection using Sequelize
 
-var db = new Sequelize(config.db.dbName, config.db.username, config.db.password, {
-    dialect: config.db.dialect,
-    port:   config.db.port,
-    logging : false
-
-});
-
-db.authenticate().complete(function(err) {
-    if (!!err) {
-        console.log('Unable to connect to the database:', err)
-    } else {
-        console.log('Database connection has been established successfully.')
-    }
-});
+require('./config/sequelize');
 
 // Init the express application
-var app = require('./config/express')(db);
+var app = require('./config/express');
 
 // Bootstrap passport config
 require('./config/passport')();
@@ -39,7 +26,9 @@ require('./config/passport')();
 app.listen(config.port);
 
 // Expose app
-exports = module.exports = app;
+module.exports = app;
+
+
 
 // Logging initialization
 console.log('SEAN application started on port ' + config.port);

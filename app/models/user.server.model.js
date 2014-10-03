@@ -27,6 +27,7 @@ var validateLocalStrategyPassword = function(password) {
  * Article Schema
  */
 module.exports = function(sequelize, DataTypes) {
+    'use strict';
     var User = sequelize.define('User', {
         created: {
             type: DataTypes.DATE,
@@ -81,7 +82,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING
         },
         roleBitMask: {
-            type: DataTypes.NUMBER
+            type: DataTypes.INTEGER
         },
         resetPasswordToken: {
             type: DataTypes.STRING
