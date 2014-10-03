@@ -55,7 +55,7 @@ module.exports = function(sequelize, DataTypes) {
             username: {
                 type: DataTypes.STRING,
                 unique: true,
-                validate: { notNull: { msg: 'Please fill in a username' } }
+                allowNull: false
             },
             password: {
                 type: DataTypes.STRING,
@@ -67,7 +67,7 @@ module.exports = function(sequelize, DataTypes) {
             },
             provider: {
                 type: DataTypes.STRING,
-                validate: { notNull: { msg: 'Provider is required' } }
+                allowNull: false
             },
             providerData: {
                 type: DataTypes.TEXT

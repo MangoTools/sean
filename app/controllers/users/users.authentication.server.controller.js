@@ -41,6 +41,7 @@ exports.signup = function(req, res) {
             }
         });
     }).error(function(err){
+        logger.error(err);
         return res.status(400).send({
             message: errorHandler.getErrorMessage(err)
         });
