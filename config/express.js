@@ -59,11 +59,13 @@ module.exports = function() {
 	app.set('view engine', 'server.view.html');
 	app.set('views', './app/views');
 
-	// Environment dependent middleware
+    console.log('here');
+
+    // Environment dependent middleware
 	if (process.env.NODE_ENV === 'development') {
 		// Enable express logger routing
         logger.debug("Overriding 'Express' logger");
-        app.use(require('morgan')({ "stream": logger.stream }));
+        app.use(require('morgan')("default", { "stream": logger.stream }));
 
 		// Disable views cache
 		app.set('view cache', false);
@@ -71,6 +73,7 @@ module.exports = function() {
 		app.locals.cache = 'memory';
 	}
 
+    console.log('and here');
 
 	// Request body parsing middleware should be above methodOverride
 	app.use(bodyParser.urlencoded({

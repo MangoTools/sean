@@ -5,8 +5,9 @@ var winston = require('winston');
 winston.emitErrs = true;
 
 module.exports = function(env){
+    var ret;
     if(env==='production'){
-        return new winston.Logger({
+        ret = new winston.Logger({
             transports: [
                 new winston.transports.Console({
                     level: 'error',
@@ -18,7 +19,7 @@ module.exports = function(env){
             exitOnError: false
         });
     }else if(env==='development'){
-        return new winston.Logger({
+        ret = new winston.Logger({
             transports: [
                 new winston.transports.Console({
                     level: 'debug',
@@ -38,16 +39,25 @@ module.exports = function(env){
             ],
             exitOnError: false
         });
+    }else{
+        //Else return default logger
+        return new winston.Logger({
+            transports: [
+                new winston.transports.Console({
+                    level: 'debug',
+                    handleExceptions: true,
+                    json: false,
+                    colorize: true
+                })
+            ],
+            exitOnError: false
+        });
     }
-    //Else return default logger
-    return winston;
-};
-module.exports.stream = {
-    write: function(message, encoding){
-        logger.info(message);
-    }
-};
+    ret.stream = {
+        write: function(message, encoding){
+            logger.info(message);
+        }
+    };
 
-module.exports.setEnv = function(env){
-
+    return ret;
 };
