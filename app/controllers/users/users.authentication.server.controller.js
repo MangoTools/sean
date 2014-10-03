@@ -28,7 +28,13 @@ exports.signup = function(req, res) {
     logger.debug('New User (local) : { id: ' + user.id + ' username: ' + user.username + ' }');
     // Then save the user
 
-    user.save().success(function(){
+    user.save().done(function(err, user){
+        if(err){
+            logger.error(err);
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        }
         // Remove sensitive data before login
         user.password = undefined;
         user.salt = undefined;
@@ -39,11 +45,6 @@ exports.signup = function(req, res) {
             } else {
                 res.jsonp(user);
             }
-        });
-    }).error(function(err){
-        logger.error(err);
-        return res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
         });
     });
 };

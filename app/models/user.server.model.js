@@ -19,7 +19,7 @@ var validateLocalStrategyProperty = function(property) {
  */
 var validateLocalStrategyPassword = function(password) {
     if( (this.provider !== 'local' || (password && password.length > 6)) === false ){
-        throw new Error('Local strategy failed');
+        throw new Error('One field is missing');
     }
 };
 
@@ -39,18 +39,18 @@ module.exports = function(sequelize, DataTypes) {
             firstName: {
                 type: DataTypes.STRING,
                 defaultValue: '',
-                validate: { isValid: validateLocalStrategyProperty, msg: 'Please fill in your first name'}
+                validate: { isValid: validateLocalStrategyProperty}
             },
             lastName: {
                 type: DataTypes.STRING,
                 defaultValue: '',
-                validate: { isValid: validateLocalStrategyProperty, msg: 'Please fill in your last name'}
+                validate: { isValid: validateLocalStrategyProperty}
             },
             email: {
                 type: DataTypes.STRING,
                 defaultValue: '',
                 validate: { isEmail: { msg: 'Please fill a valid email address}' },
-                    isValid: validateLocalStrategyProperty, msg: 'Please fill in your email'}
+                    isValid: validateLocalStrategyProperty}
             },
             username: {
                 type: DataTypes.STRING,
@@ -60,7 +60,7 @@ module.exports = function(sequelize, DataTypes) {
             password: {
                 type: DataTypes.STRING,
                 default: '',
-                validate: { isValid: validateLocalStrategyPassword, msg: 'Password should be longer'}
+                validate: { isValid: validateLocalStrategyPassword}
             },
             salt: {
                 type: DataTypes.STRING

@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
         title: {
             type: DataTypes.STRING,
             defaultValue: '',
-            validate: { notNull: true, msg: 'Title cannot be blank'}
+            allowNull: false
         },
         content: {
             type: DataTypes.TEXT,

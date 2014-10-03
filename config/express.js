@@ -59,8 +59,6 @@ module.exports = function() {
 	app.set('view engine', 'server.view.html');
 	app.set('views', './app/views');
 
-    console.log('here');
-
     // Environment dependent middleware
 	if (process.env.NODE_ENV === 'development') {
 		// Enable express logger routing
@@ -73,9 +71,7 @@ module.exports = function() {
 		app.locals.cache = 'memory';
 	}
 
-    console.log('and here');
-
-	// Request body parsing middleware should be above methodOverride
+    // Request body parsing middleware should be above methodOverride
 	app.use(bodyParser.urlencoded({
 		extended: true
 	}));
