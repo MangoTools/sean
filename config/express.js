@@ -66,11 +66,16 @@ module.exports = function() {
 
 	// Environment dependent middleware
 	if (process.env.NODE_ENV === 'development') {
+		// Enable express logger routing
+        logger.debug("Overriding 'Express' logger");
+        app.use(require('morgan')({ "stream": logger.stream }));
+
 		// Disable views cache
 		app.set('view cache', false);
 	} else if (process.env.NODE_ENV === 'production') {
 		app.locals.cache = 'memory';
 	}
+
 
 	// Request body parsing middleware should be above methodOverride
 	app.use(bodyParser.urlencoded({
