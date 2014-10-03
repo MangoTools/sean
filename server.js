@@ -3,20 +3,28 @@
  * Module dependencies.
  */
 var init = require('./config/init')(),
-	config = require('./config/config'),
-	mongoose = require('mongoose');
+    config = require('./config/config'),
+    Sequelize = require('sequelize');
+
 
 /**
  * Main application entry file.
  * Please note that the order of loading is important.
  */
 
-// Bootstrap db connection
-var db = mongoose.connect(config.db, function(err) {
-	if (err) {
-		console.error('\x1b[31m', 'Could not connect to MongoDB!');
-		console.log(err);
-	}
+// Bootstrap db connection using Sequelize
+
+var db = new Sequelize(config.db.dbName, config.db.username, config.db.password, {
+    dialect: config.db.dialect,
+    port:   config.db.port
+});
+
+db.authenticate().complete(function(err) {
+    if (!!err) {
+        console.log('Unable to connect to the database:', err)
+    } else {
+        console.log('Database connection has been established successfully.')
+    }
 });
 
 // Init the express application
@@ -32,4 +40,10 @@ app.listen(config.port);
 exports = module.exports = app;
 
 // Logging initialization
-console.log('MEAN.JS application started on port ' + config.port);
+console.log('SEAN application started on port ' + config.port);
+
+
+
+
+
+

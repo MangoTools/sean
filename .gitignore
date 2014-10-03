@@ -31,3 +31,7 @@ node_modules
 
 #webstorm
 .idea
+
+
+#bower component
+public/lib
