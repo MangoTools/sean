@@ -1,24 +1,24 @@
 FROM dockerfile/nodejs
 
-MAINTAINER Matthias Luebken, matthias@catalyst-zero.com
+MAINTAINER Mango.Tools
 
-WORKDIR /home/mean
+WORKDIR /home/sean
 
-# Install Mean.JS Prerequisites
+# Install Sean.JS Prerequisites
 RUN npm install -g grunt-cli
 RUN npm install -g bower
 
-# Install Mean.JS packages
-ADD package.json /home/mean/package.json
+# Install Sean.JS packages
+ADD package.json /home/sean/package.json
 RUN npm install
 
 # Manually trigger bower. Why doesnt this work via npm install?
-ADD .bowerrc /home/mean/.bowerrc
-ADD bower.json /home/mean/bower.json
+ADD .bowerrc /home/sean/.bowerrc
+ADD bower.json /home/sean/bower.json
 RUN bower install --config.interactive=false --allow-root
 
 # Make everything available for start
-ADD . /home/mean
+ADD . /home/sean
 
 # currently only works for development
 ENV NODE_ENV development
