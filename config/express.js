@@ -14,7 +14,7 @@ var express = require('express'),
 	cookieParser = require('cookie-parser'),
 	helmet = require('helmet'),
 	passport = require('passport'),
-    sequelizeStore = require('connect-session-sequelize')(session.Store),
+    sequelizeStore = require('../app/helpers/sequelizeStore.server.js')(session.Store),
 	flash = require('connect-flash'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
@@ -31,7 +31,7 @@ module.exports = function(db) {
     app.set('server', server);
 
     // synchronise Database
-    db.sync({ force: false }).complete(function(err) {
+    db.sync({ force: false ,logging:false }).complete(function(err) {
             if (err) {
                 throw err[0]
             }

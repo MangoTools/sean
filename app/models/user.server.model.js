@@ -1,29 +1,29 @@
 'use strict';
 
 /**
- * Module dependencies.
- */
+* Module dependencies.
+*/
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
 	crypto = require('crypto');
 
 /**
- * A Validation function for local strategy properties
- */
+* A Validation function for local strategy properties
+*/
 var validateLocalStrategyProperty = function(property) {
 	return ((this.provider !== 'local' && !this.updated) || property.length);
 };
 
 /**
- * A Validation function for local strategy password
- */
+* A Validation function for local strategy password
+*/
 var validateLocalStrategyPassword = function(password) {
 	return (this.provider !== 'local' || (password && password.length > 6));
 };
 
 /**
- * User Schema
- */
+* User Schema
+*/
 var UserSchema = new Schema({
 	firstName: {
 		type: String,
@@ -92,8 +92,8 @@ var UserSchema = new Schema({
 });
 
 /**
- * Hook a pre save method to hash the password
- */
+* Hook a pre save method to hash the password
+*/
 UserSchema.pre('save', function(next) {
 	if (this.password && this.password.length > 6) {
 		this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
@@ -104,8 +104,8 @@ UserSchema.pre('save', function(next) {
 });
 
 /**
- * Create instance method for hashing a password
- */
+* Create instance method for hashing a password
+*/
 UserSchema.methods.hashPassword = function(password) {
 	if (this.salt && password) {
 		return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
@@ -115,15 +115,15 @@ UserSchema.methods.hashPassword = function(password) {
 };
 
 /**
- * Create instance method for authenticating user
- */
+* Create instance method for authenticating user
+*/
 UserSchema.methods.authenticate = function(password) {
 	return this.password === this.hashPassword(password);
 };
 
 /**
- * Find possible not used username
- */
+* Find possible not used username
+*/
 UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {
 	var _this = this;
 	var possibleUsername = username + (suffix || '');

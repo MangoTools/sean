@@ -1,14 +1,14 @@
 'use strict';
 
 /**
- * Module dependencies.
- */
+* Module dependencies.
+*/
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
 /**
- * Article Schema
- */
+* Article Schema
+*/
 var ArticleSchema = new Schema({
 	created: {
 		type: Date,

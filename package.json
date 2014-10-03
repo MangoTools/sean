@@ -44,6 +44,7 @@
     "async": "~0.9.0",
     "nodemailer": "~1.1.1",
     "sequelize": "^2.0.0-rc1",
+    "mongoose" : "latest",
     "pg": "^3.5.0",
     "socket.io": "^1.1.0",
     "winston": "^0.8.0"

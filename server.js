@@ -16,7 +16,9 @@ var init = require('./config/init')(),
 
 var db = new Sequelize(config.db.dbName, config.db.username, config.db.password, {
     dialect: config.db.dialect,
-    port:   config.db.port
+    port:   config.db.port,
+    logging : false
+
 });
 
 db.authenticate().complete(function(err) {
