@@ -4,7 +4,7 @@
 * Article Schema
 */
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('Article', {
+    var Article = sequelize.define('Article', {
         created: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW
@@ -24,4 +24,5 @@ module.exports = function(sequelize, DataTypes) {
             Article.belongsTo(models.User);
         }
     });
+    return Article;
 };

@@ -27,7 +27,7 @@ var validateLocalStrategyPassword = function(password) {
  * Article Schema
  */
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('Article', {
+    var User = sequelize.define('User', {
         created: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW
@@ -109,6 +109,7 @@ module.exports = function(sequelize, DataTypes) {
             User.hasMany(models.Article);
         }
     });
+    return User;
 };
 //
 ///**
