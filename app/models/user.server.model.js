@@ -11,7 +11,7 @@ var crypto = require('crypto');
 var validateLocalStrategyProperty = function(property) {
     if( ((this.provider !== 'local' && !this.updated) || property.length) === false ){
         throw new Error('Local strategy failed');
-    };
+    }
 };
 
 /**
@@ -20,14 +20,14 @@ var validateLocalStrategyProperty = function(property) {
 var validateLocalStrategyPassword = function(password) {
     if( (this.provider !== 'local' || (password && password.length > 6)) === false ){
         throw new Error('Local strategy failed');
-    };
+    }
 };
 
 /**
  * Article Schema
  */
 module.exports = function(sequelize, DataTypes) {
-    'use strict';
+
     var User = sequelize.define('User', {
         created: {
             type: DataTypes.DATE,
@@ -45,9 +45,6 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             defaultValue: '',
             validate: { isValid: validateLocalStrategyProperty, msg: 'Please fill in your last name'}
-        },
-        displayName: {
-            type: DataTypes.STRING
         },
         email: {
             type: DataTypes.STRING,
@@ -94,17 +91,22 @@ module.exports = function(sequelize, DataTypes) {
     },
     {
         instanceMethods: {
-            //makeSalt: function() {
-            //    return crypto.randomBytes(16).toString('base64');
-            //},
-            //authenticate: function(plainText){
-            //    return this.encryptPassword(plainText, this.salt) === this.hashedPassword;
-            //},
-            //encryptPassword: function(password, salt) {
-            //    if (!password || !salt) return '';
-            //    salt = new Buffer(salt, 'base64');
-            //    return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
-            //}
+            getDisplayName: function() {
+                return [this.firstName, this.lastName].join(' ');
+            },
+            makeSalt: function() {
+                new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
+            },
+            authenticate: function(password){
+                return this.password === this.hashPassword(password);
+            },
+            hashPassword: function(password,salt) {
+                if (salt && password) {
+                    return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
+                } else {
+                    return password;
+                }
+            }
         },
         associate: function(models) {
             User.hasMany(models.Article);
@@ -112,37 +114,9 @@ module.exports = function(sequelize, DataTypes) {
     });
     return User;
 };
-//
-///**
-//* Hook a pre save method to hash the password
-//*/
-//UserSchema.pre('save', function(next) {
-//	if (this.password && this.password.length > 6) {
-//		this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
-//		this.password = this.hashPassword(this.password);
-//	}
-//
-//	next();
-//});
-//
-///**
-//* Create instance method for hashing a password
-//*/
-//UserSchema.methods.hashPassword = function(password) {
-//	if (this.salt && password) {
-//		return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
-//	} else {
-//		return password;
-//	}
-//};
-//
-///**
-//* Create instance method for authenticating user
-//*/
-//UserSchema.methods.authenticate = function(password) {
-//	return this.password === this.hashPassword(password);
-//};
-//
+
+
+
 ///**
 //* Find possible not used username
 //*/

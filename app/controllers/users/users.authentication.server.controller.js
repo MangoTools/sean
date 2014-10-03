@@ -5,24 +5,26 @@
  */
 var _ = require('lodash'),
 	errorHandler = require('../errors'),
-	mongoose = require('mongoose'),
+    roleManager = require('../../../config/roleManager'),
 	passport = require('passport'),
-	User = mongoose.model('User');
+    db = require('../../../config/sequelize');
 
 /**
  * Signup
  */
 exports.signup = function(req, res) {
 	// For security measurement we remove the roles from the req.body object
-	delete req.body.roles;
+	delete req.body.roleTitle;
+    delete req.body.roleBitMask;
 
 	// Init Variables
-	var user = new User(req.body);
-	var message = null;
+    req.body.provider = 'local';
+    req.body.roleBitMask =roleManager.userRoles.user.bitMask;
+    req.body.roleTitle =roleManager.userRoles.user.title;
+	var user = db.User.build(req.body);
 
-	// Add missing user fields
-	user.provider = 'local';
-	user.displayName = user.firstName + ' ' + user.lastName;
+    user.salt = user.makeSalt();
+    user.password = user.hashPassword(req.body.password,user.salt)
 
 	// Then save the user 
 	user.save(function(err) {
