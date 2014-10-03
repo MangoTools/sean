@@ -24,6 +24,19 @@ var validateLocalStrategyPassword = function(password) {
 };
 
 /**
+ * hash the password
+ * @param user
+ * @param fn
+ */
+var cryptPassword =function(user, fn) {
+    if (user.password && user.password.length > 6) {
+        user.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
+        user.password = user.hashPassword(this.password);
+    }
+    fn(null, user);
+};
+
+/**
  * Article Schema
  */
 module.exports = function(sequelize, DataTypes) {
@@ -106,7 +119,9 @@ module.exports = function(sequelize, DataTypes) {
                     } else {
                         return password;
                     }
-                },
+                }
+            },
+            classMethods: {
                 findUniqueUsername : function(username, suffix, callback) {
                     var _this = this;
                     var possibleUsername = username + (suffix || '');
@@ -128,17 +143,13 @@ module.exports = function(sequelize, DataTypes) {
             },
             associate: function(models) {
                 User.hasMany(models.Article);
+            },
+            hooks: {
+                beforeCreate: cryptPassword, // A verifier si necessaire?
+                beforeUpdate: cryptPassword, // Celui-la c sur
+                beforeBulkCreate: cryptPassword, // A verifier si necessaire?
+                beforeBulkUpdate: cryptPassword // A verifier si necessaire?
             }
         });
     return User;
 };
-
-
-
-///**
-//* Find possible not used username
-//*/
-//UserSchema.statics.
-//};
-
-
