@@ -5,7 +5,7 @@
  */
 var passport = require('passport'),
 	LocalStrategy = require('passport-local').Strategy,
-	User = require('mongoose').model('User');
+    db = require('../sequelize');
 
 module.exports = function() {
 	// Use local strategy
@@ -14,25 +14,22 @@ module.exports = function() {
 			passwordField: 'password'
 		},
 		function(username, password, done) {
-			User.findOne({
-				username: username
-			}, function(err, user) {
-				if (err) {
-					return done(err);
-				}
-				if (!user) {
-					return done(null, false, {
-						message: 'Unknown user'
-					});
-				}
-				if (!user.authenticate(password)) {
-					return done(null, false, {
-						message: 'Invalid password'
-					});
-				}
+			db.User.find({where :{username: username}}).success(function(user){
+                if (!user) {
+                    return done(null, false, {
+                        message: 'Unknown user'
+                    });
+                }
+                if (!user.authenticate(password)) {
+                    return done(null, false, {
+                        message: 'Invalid password'
+                    });
+                }
+                return done(null, user);
+            }).error(function(err){
+                return done(err);
+            });
 
-				return done(null, user);
-			});
 		}
 	));
 };

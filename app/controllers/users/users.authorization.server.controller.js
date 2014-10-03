@@ -4,21 +4,20 @@
  * Module dependencies.
  */
 var _ = require('lodash'),
-	mongoose = require('mongoose'),
-	User = mongoose.model('User');
+    db = require('../../../config/sequelize');
 
 /**
  * User middleware
  */
 exports.userByID = function(req, res, next, id) {
-	User.findOne({
-		_id: id
-	}).exec(function(err, user) {
-		if (err) return next(err);
-		if (!user) return next(new Error('Failed to load User ' + id));
-		req.profile = user;
-		next();
-	});
+
+	db.User.find({where : { id: id }}).success(function(user){
+        if (!user) return next(new Error('Failed to load User ' + id));
+        req.profile = user;
+        next();
+    }).error(function(err){
+        next(err);
+    });
 };
 
 /**
@@ -40,15 +39,15 @@ exports.requiresLogin = function(req, res, next) {
 exports.hasAuthorization = function(roles) {
 	var _this = this;
 
-	return function(req, res, next) {
-		_this.requiresLogin(req, res, function() {
-			if (_.intersection(req.user.roles, roles).length) {
-				return next();
-			} else {
-				return res.status(403).send({
-					message: 'User is not authorized'
-				});
-			}
-		});
-	};
+    return function(req, res, next) {
+        _this.requiresLogin(req, res, function() {
+            if (req.user.role.title === role.title && req.user.role.bitMask === role.bitMask) {
+                return next();
+            } else {
+                return res.status(403).send({
+                    message: 'User is not authorized'
+                });
+            }
+        });
+    };
 };

@@ -5,9 +5,8 @@
  */
 var _ = require('lodash'),
 	errorHandler = require('../errors'),
-	mongoose = require('mongoose'),
 	passport = require('passport'),
-	User = mongoose.model('User');
+    db = require('../../../config/sequelize');
 
 /**
  * Update user details
@@ -15,32 +14,27 @@ var _ = require('lodash'),
 exports.update = function(req, res) {
 	// Init Variables
 	var user = req.user;
-	var message = null;
 
 	// For security measurement we remove the roles from the req.body object
-	delete req.body.roles;
-
+	delete req.body.roleTitle;
+    delete req.body.roleBitMask;
 	if (user) {
 		// Merge existing user
 		user = _.extend(user, req.body);
 		user.updated = Date.now();
-		user.displayName = user.firstName + ' ' + user.lastName;
-
-		user.save(function(err) {
-			if (err) {
-				return res.status(400).send({
-					message: errorHandler.getErrorMessage(err)
-				});
-			} else {
-				req.login(user, function(err) {
-					if (err) {
-						res.status(400).send(err);
-					} else {
-						res.jsonp(user);
-					}
-				});
-			}
-		});
+        user.save().success(function(){
+            req.login(user, function(err) {
+                if (err) {
+                    res.status(400).send(err);
+                } else {
+                    res.jsonp(user);
+                }
+            });
+        }).error(function(err){
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        });
 	} else {
 		res.status(400).send({
 			message: 'User is not signed in'

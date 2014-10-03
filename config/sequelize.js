@@ -14,9 +14,9 @@ var sequelize = new Sequelize(config.db.dbName, config.db.username, config.db.pa
 
 sequelize.authenticate().complete(function(err) {
     if (!!err) {
-        console.log('Unable to connect to the database:', err)
+       logger.error('Unable to connect to the database:', err)
     } else {
-        console.log('Database connection has been established successfully.')
+        logger.info('Database connection has been established successfully.')
     }
 });
 
@@ -27,7 +27,7 @@ fs.readdirSync(config.modelsDir)
     })
     // import model files and save model names
     .forEach(function(file) {
-        console.log('Loading model file ' + file);
+        logger.debug('Loading model file ' + file);
         var model = sequelize.import(path.join(config.modelsDir, file));
         db[model.name] = model;
     })
@@ -44,8 +44,8 @@ Object.keys(db).forEach(function(modelName) {
 sequelize
     .sync({force: false})
     .complete(function(err){
-        if(err) console.log("An error occured %j",err);
-        else console.log("Database dropped and synchronized");
+        if(err)  logger.error("An error occured %j",err);
+        else  logger.info("Database synchronized");
     });
 
 // assign the sequelize variables to the db object and returning the db.

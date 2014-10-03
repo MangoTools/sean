@@ -3,7 +3,8 @@
 var passport = require('passport'),
 	//User = require('mongoose').model('User'),
 	path = require('path'),
-	config = require('./config');
+	config = require('./config'),
+    db = require('./sequelize');
 
 module.exports = function() {
 	// Serialize sessions
@@ -13,11 +14,14 @@ module.exports = function() {
 
 	// Deserialize sessions
 	passport.deserializeUser(function(id, done) {
-		User.findOne({
-			_id: id
-		}, '-salt -password', function(err, user) {
-			done(err, user);
-		});
+		User.find({where :{id: id}})
+            .success(function(user){
+                delete user.salt;
+                delete user.password;
+                done(null,user);
+            }).error(function(err){
+                done(err,null);
+            });
 	});
 
 	// Initialize strategies
