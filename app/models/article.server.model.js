@@ -18,6 +18,10 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.TEXT,
             defaultValue: ''
         }
-        // User : ref 'User'
+    },
+    {
+        associate: function(models){
+            Article.belongsTo(models.User);
+        }
     });
 };
