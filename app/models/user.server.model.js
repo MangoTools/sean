@@ -31,7 +31,7 @@ var validateLocalStrategyPassword = function(password) {
 var cryptPassword =function(user, fn) {
     if (user.password && user.password.length > 6) {
         user.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
-        user.password = user.hashPassword(this.password);
+        user.password = user.hashPassword(user.password, user.salt);
     }
     fn(null, user);
 };
@@ -146,9 +146,9 @@ module.exports = function(sequelize, DataTypes) {
             },
             hooks: {
                 beforeCreate: cryptPassword, // A verifier si necessaire?
-                beforeUpdate: cryptPassword, // Celui-la c sur
-                beforeBulkCreate: cryptPassword, // A verifier si necessaire?
-                beforeBulkUpdate: cryptPassword // A verifier si necessaire?
+                beforeUpdate: cryptPassword // Celui-la c sur
+                //beforeBulkCreate: cryptPassword, // A verifier si necessaire?
+                //beforeBulkUpdate: cryptPassword // A verifier si necessaire?
             }
         });
     return User;
