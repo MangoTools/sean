@@ -27,11 +27,6 @@ module.exports = function() {
     var server = http.createServer(app);
     var io = socketio.listen(server);
 
-
-    app.set('socketio', io);
-    app.set('server', server);
-
-
 	// Setting application local variables
 	app.locals.title = config.app.title;
 	app.locals.description = config.app.description;
@@ -91,14 +86,14 @@ module.exports = function() {
 	app.use(cookieParser());
 
 	// Express SQL session storage
-	app.use(session({
-		saveUninitialized: true,
-		resave: true,
-		secret: config.sessionSecret,
-		store: new sequelizeStore({
-			db: db
-		})
-	}));
+	//app.use(session({
+	//	saveUninitialized: true,
+	//	resave: true,
+	//	secret: config.sessionSecret,
+	//	store: new sequelizeStore({
+	//		db: db
+	//	})
+	//}));
 
 	// use passport session
 	app.use(passport.initialize());
@@ -144,7 +139,8 @@ module.exports = function() {
 		});
 	});
 
-
+    app.set('socketio', io);
+    app.set('server', server);
 
 	return app;
 };

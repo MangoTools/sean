@@ -19,17 +19,16 @@ logger.info('SEAN application starting...');
 require('./config/sequelize');
 
 // Init the express application
-var app = require('./config/express');
+var app = require('./config/express')();
 
 // Bootstrap passport config
 require('./config/passport')();
-
 
 // Start the app by listening on <port>
 app.listen(config.port);
 
 // Expose app
-module.exports = app;
+exports = module.exports = app;
 
 
 
