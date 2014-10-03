@@ -6,16 +6,16 @@
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define('Article', {
         created: {
-            type: Sequelize.DATE,
-            defaultValue: Sequelize.NOW
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW
         },
         title: {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             defaultValue: '',
             validate: { notNull: true, msg: 'Title cannot be blank'}
         },
         content: {
-            type: Sequelize.STRING,
+            type: DataTypes.TEXT,
             defaultValue: ''
         }
         // User : ref 'User'

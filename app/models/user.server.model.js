@@ -1,95 +1,97 @@
 'use strict';
 
 /**
-* Module dependencies.
-*/
-var mongoose = require('mongoose'),
-	Schema = mongoose.Schema,
-	crypto = require('crypto');
+ * Module dependencies.
+ */
+var crypto = require('crypto');
 
 /**
-* A Validation function for local strategy properties
-*/
+ * A Validation function for local strategy properties
+ */
 var validateLocalStrategyProperty = function(property) {
-	return ((this.provider !== 'local' && !this.updated) || property.length);
+    if( ((this.provider !== 'local' && !this.updated) || property.length) === false ){
+        throw new Error('Local strategy failed');
+    };
 };
 
 /**
-* A Validation function for local strategy password
-*/
+ * A Validation function for local strategy password
+ */
 var validateLocalStrategyPassword = function(password) {
-	return (this.provider !== 'local' || (password && password.length > 6));
+    if( (this.provider !== 'local' || (password && password.length > 6)) === false ){
+        throw new Error('Local strategy failed');
+    };
 };
 
 /**
-* User Schema
-*/
-var UserSchema = new Schema({
-	firstName: {
-		type: String,
-		trim: true,
-		default: '',
-		validate: [validateLocalStrategyProperty, 'Please fill in your first name']
-	},
-	lastName: {
-		type: String,
-		trim: true,
-		default: '',
-		validate: [validateLocalStrategyProperty, 'Please fill in your last name']
-	},
-	displayName: {
-		type: String,
-		trim: true
-	},
-	email: {
-		type: String,
-		trim: true,
-		default: '',
-		validate: [validateLocalStrategyProperty, 'Please fill in your email'],
-		match: [/.+\@.+\..+/, 'Please fill a valid email address']
-	},
-	username: {
-		type: String,
-		unique: 'testing error message',
-		required: 'Please fill in a username',
-		trim: true
-	},
-	password: {
-		type: String,
-		default: '',
-		validate: [validateLocalStrategyPassword, 'Password should be longer']
-	},
-	salt: {
-		type: String
-	},
-	provider: {
-		type: String,
-		required: 'Provider is required'
-	},
-	providerData: {},
-	additionalProvidersData: {},
-	roles: {
-		type: [{
-			type: String,
-			enum: ['user', 'admin']
-		}],
-		default: ['user']
-	},
-	updated: {
-		type: Date
-	},
-	created: {
-		type: Date,
-		default: Date.now
-	},
-	/* For reset password */
-	resetPasswordToken: {
-		type: String
-	},
-  	resetPasswordExpires: {
-  		type: Date
-  	}
-});
+ * Article Schema
+ */
+module.exports = function(sequelize, DataTypes) {
+    return sequelize.define('Article', {
+        created: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW
+        },
+        updated: {
+            type: DataTypes.DATE
+        },
+        firstName: {
+            type: DataTypes.STRING,
+            defaultValue: '',
+            validate: { isValid: validateLocalStrategyProperty, msg: 'Please fill in your first name'}
+        },
+        lastName: {
+            type: DataTypes.STRING,
+            defaultValue: '',
+            validate: { isValid: validateLocalStrategyProperty, msg: 'Please fill in your last name'}
+        },
+        displayName: {
+            type: DataTypes.STRING
+        },
+        email: {
+            type: DataTypes.STRING,
+            defaultValue: '',
+            validate: { isEmail: { msg: 'Please fill a valid email address}' },
+                        isValid: validateLocalStrategyProperty, msg: 'Please fill in your email'}
+        },
+        username: {
+            type: DataTypes.STRING,
+            unique: true,
+            validate: { notNull: { msg: 'Please fill in a username' } }
+        },
+        password: {
+            type: DataTypes.STRING,
+            default: '',
+            validate: { isValid: validateLocalStrategyPassword, msg: 'Password should be longer'}
+        },
+        salt: {
+            type: DataTypes.STRING
+        },
+        provider: {
+            type: DataTypes.STRING,
+            validate: { notNull: { msg: 'Provider is required' } }
+        },
+        providerData: {
+            type: DataTypes.TEXT
+        },
+        additionalProvidersData: {
+            type: DataTypes.TEXT
+        },
+        roleTitle: {
+            type: DataTypes.STRING
+        },
+        roleBitMask: {
+            type: DataTypes.NUMBER
+        },
+        resetPasswordToken: {
+            type: DataTypes.STRING
+        },
+        resetPasswordExpires: {
+            type: DataTypes.DATE
+        }
+
+    });
+};
 
 /**
 * Hook a pre save method to hash the password
