@@ -14,7 +14,10 @@ module.exports = function() {
 			passwordField: 'password'
 		},
 		function(username, password, done) {
-			db.User.find({where :{username: username}}).success(function(user){
+			db.User.find({where :{username: username}}).done(function(err,user){
+                if (err) {
+                    return done(err);
+                }
                 if (!user) {
                     return done(null, false, {
                         message: 'Unknown user'
@@ -25,9 +28,8 @@ module.exports = function() {
                         message: 'Invalid password'
                     });
                 }
+
                 return done(null, user);
-            }).error(function(err){
-                return done(err);
             });
 
 		}
