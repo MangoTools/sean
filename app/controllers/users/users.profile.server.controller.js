@@ -22,18 +22,21 @@ exports.update = function(req, res) {
 		// Merge existing user
 		user = _.extend(user, req.body);
 		user.updated = Date.now();
-        user.save().success(function(){
-            req.login(user, function(err) {
-                if (err) {
-                    res.status(400).send(err);
-                } else {
-                    res.jsonp(user);
-                }
-            });
-        }).error(function(err){
-            return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
-            });
+        user.displayName = user.firstName + ' ' + user.lastName;
+        user.save().done(function(err){
+            if (err) {
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                req.login(user, function(err) {
+                    if (err) {
+                        res.status(400).send(err);
+                    } else {
+                        res.jsonp(user);
+                    }
+                });
+            }
         });
 	} else {
 		res.status(400).send({

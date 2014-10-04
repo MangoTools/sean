@@ -30,7 +30,7 @@ exports.forgot = function(req, res, next) {
 
                 db.User.find({where : {
                     username: req.body.username }
-                }).success(function(user){
+                }).done(function(err,user){
                     if (!user) {
                         return res.status(400).send({
                             message: 'No account with that username has been found'
@@ -40,17 +40,13 @@ exports.forgot = function(req, res, next) {
                             message: 'It seems like you signed up using your ' + user.provider + ' account'
                         });
                     } else {
-                        // Remove sensitive data before login
-                        user.password = undefined;
-                        user.salt = undefined;
                         user.resetPasswordToken = token;
                         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-                        user.save().success(function(){
+
+                        user.save().done(function(err) {
                             done(err, token, user);
                         });
                     }
-                }).error(function(err){
-                    next(err);
                 });
 
             } else {
@@ -61,7 +57,7 @@ exports.forgot = function(req, res, next) {
         },
         function(token, user, done) {
             res.render('templates/reset-password-email', {
-                name: user.getDisplayName(),
+                name: user.displayName,
                 appName: config.app.title,
                 url: 'http://' + req.headers.host + '/auth/reset/' + token
             }, function(err, emailHTML) {
@@ -100,10 +96,11 @@ exports.validateResetToken = function(req, res) {
         resetPasswordToken: req.params.token,
         resetPasswordExpires : {gt :Date.now()
         }}
-    }).success(function(user) {
+    }).done(function(err,user) {
+        if (!user) {
+            return res.redirect('/password/reset/invalid');
+        }
         res.redirect('/password/reset/' + req.params.token);
-    }).error(function(err){
-        return res.redirect('/password/reset/invalid');
     });
 };
 
@@ -119,48 +116,46 @@ exports.reset = function(req, res, next) {
                 resetPasswordToken: req.params.token,
                 resetPasswordExpires : {gt :Date.now()
                 }}
-            }).success(function(user) {
-                if (user) {
+            }).done(function(err,user) {
+                if (!err && user) {
                     if (passwordDetails.newPassword === passwordDetails.verifyPassword) {
                         user.password = passwordDetails.newPassword;
                         user.resetPasswordToken = undefined;
                         user.resetPasswordExpires = undefined;
 
-                        user.save().success(function(){
-                            // Remove sensitive data before login
-                            user.password = undefined;
-                            user.salt = undefined;
+                        user.save().done(function(err) {
+                            if (err) {
+                                return res.status(400).send({
+                                    message: errorHandler.getErrorMessage(err)
+                                });
+                            } else {
+                                req.login(user, function(err) {
+                                    if (err) {
+                                        res.status(400).send(err);
+                                    } else {
+                                        // Return authenticated user
+                                        res.jsonp(user);
 
-                            req.login(user, function(err) {
-                                if (err) {
-                                    res.status(400).send(err);
-                                } else {
-                                    // Return authenticated user
-                                    res.jsonp(user);
-
-                                    done(err, user);
-                                }
-                            });
-                        }).error(function(err){
-                            return res.status(400).send({
-                                message: errorHandler.getErrorMessage(err)
-                            });
+                                        done(err, user);
+                                    }
+                                });
+                            }
                         });
                     } else {
                         return res.status(400).send({
                             message: 'Passwords do not match'
                         });
                     }
+                } else {
+                    return res.status(400).send({
+                        message: 'Password reset token is invalid or has expired.'
+                    });
                 }
-            }).error(function(err){
-                return res.status(400).send({
-                    message: 'Password reset token is invalid or has expired.'
-                });
             });
         },
         function(user, done) {
             res.render('templates/reset-password-confirm-email', {
-                name: user.getDisplayName(),
+                name: user.displayName,
                 appName: config.app.title
             }, function(err, emailHTML) {
                 done(err, emailHTML, user);
@@ -195,42 +190,44 @@ exports.changePassword = function(req, res, next) {
     if (req.user) {
         if (passwordDetails.newPassword) {
             User.find({ where : { id :req.user.id}})
-                .success(function(user) {
-                    if (user.authenticate(passwordDetails.currentPassword)) {
-                        if (passwordDetails.newPassword === passwordDetails.verifyPassword) {
-                            user.password = passwordDetails.newPassword;
+                .done(function(err,user) {
+                    if (!err && user) {
+                        if (user.authenticate(passwordDetails.currentPassword)) {
+                            if (passwordDetails.newPassword === passwordDetails.verifyPassword) {
+                                user.password = passwordDetails.newPassword;
 
-                            user.save(function(err) {
-                                if (err) {
-                                    return res.status(400).send({
-                                        message: errorHandler.getErrorMessage(err)
-                                    });
-                                } else {
-                                    req.login(user, function(err) {
-                                        if (err) {
-                                            res.status(400).send(err);
-                                        } else {
-                                            res.send({
-                                                message: 'Password changed successfully'
-                                            });
-                                        }
-                                    });
-                                }
-                            });
+                                user.save().done(function(err) {
+                                    if (err) {
+                                        return res.status(400).send({
+                                            message: errorHandler.getErrorMessage(err)
+                                        });
+                                    } else {
+                                        req.login(user, function(err) {
+                                            if (err) {
+                                                res.status(400).send(err);
+                                            } else {
+                                                res.send({
+                                                    message: 'Password changed successfully'
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            } else {
+                                res.status(400).send({
+                                    message: 'Passwords do not match'
+                                });
+                            }
                         } else {
                             res.status(400).send({
-                                message: 'Passwords do not match'
+                                message: 'Current password is incorrect'
                             });
                         }
                     } else {
                         res.status(400).send({
-                            message: 'Current password is incorrect'
+                            message: 'User is not found'
                         });
                     }
-                }).error(function(err){
-                    res.status(400).send({
-                        message: 'User is not found'
-                    });
                 });
         } else {
             res.status(400).send({
