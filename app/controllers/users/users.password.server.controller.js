@@ -191,7 +191,7 @@ exports.changePassword = function(req, res, next) {
 
     if (req.user) {
         if (passwordDetails.newPassword) {
-            User.find({ where : { id :req.user.id}})
+            db.User.find({ where : { id :req.user.id}})
                 .done(function(err,user) {
                     if (!err && user) {
                         if (user.authenticate(passwordDetails.currentPassword)) {

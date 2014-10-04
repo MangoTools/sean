@@ -14,7 +14,7 @@ module.exports = function() {
 
 	// Deserialize sessions
 	passport.deserializeUser(function(id, done) {
-		User.find({where :{id: id}})
+		db.User.find({where :{id: id}})
             .success(function(user){
                 delete user.salt;
                 delete user.password;
