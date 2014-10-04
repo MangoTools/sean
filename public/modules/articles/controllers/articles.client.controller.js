@@ -10,7 +10,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 				content: this.content
 			});
 			article.$save(function(response) {
-				$location.path('articles/' + response._id);
+				$location.path('articles/' + response.id);
 
 				$scope.title = '';
 				$scope.content = '';
@@ -39,7 +39,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			var article = $scope.article;
 
 			article.$update(function() {
-				$location.path('articles/' + article._id);
+				$location.path('articles/' + article.id);
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
