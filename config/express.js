@@ -14,12 +14,17 @@ var express = require('express'),
 	helmet = require('helmet'),
 	passport = require('passport'),
     db = require('./sequelize'),
-    sequelizeStore = require('../app/helpers/sequelizeStore.server.js')(session.Store),
 	flash = require('connect-flash'),
 	config = require('./config'),
-
 	consolidate = require('consolidate'),
 	path = require('path');
+
+// initialize session store
+var SequelizeStore = require('connect-sequelize')(session),
+    modelName = 'Session',
+    options = {};
+
+
 
 module.exports = function() {
     // Initialize express app
@@ -85,14 +90,15 @@ module.exports = function() {
 	app.use(cookieParser());
 
 	// Express SQL session storage
-	//app.use(session({
-	//	saveUninitialized: true,
-	//	resave: true,
-	//	secret: config.sessionSecret,
-	//	store: new sequelizeStore({
-	//		db: db
-	//	})
-	//}));
+
+
+	app.use(session({
+		saveUninitialized: true,
+		resave: true,
+		secret: config.sessionSecret,
+        store: new SequelizeStore(db.sequelize, options, modelName),
+        proxy: false // if you do SSL outside of node.
+	}));
 
 	// use passport session
 	app.use(passport.initialize());

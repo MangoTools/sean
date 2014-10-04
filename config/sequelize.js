@@ -23,7 +23,7 @@ sequelize.authenticate().complete(function(err) {
 // loop through all files in models directory ignoring hidden files and this file
 fs.readdirSync(config.modelsDir)
     .filter(function(file) {
-        return (file.indexOf('.') !== 0) && (file !== 'index.js')
+        return (file.indexOf('.') !== 0) && (file !== 'index.js') && (file !== 'session.server.model.js');
     })
     // import model files and save model names
     .forEach(function(file) {
