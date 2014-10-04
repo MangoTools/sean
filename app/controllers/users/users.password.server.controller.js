@@ -110,6 +110,7 @@ exports.validateResetToken = function(req, res) {
 exports.reset = function(req, res, next) {
     // Init Variables
     var passwordDetails = req.body;
+
     async.waterfall([
         function(done) {
             User.find({ where: {
@@ -186,6 +187,7 @@ exports.reset = function(req, res, next) {
 exports.changePassword = function(req, res, next) {
     // Init Variables
     var passwordDetails = req.body;
+
 
     if (req.user) {
         if (passwordDetails.newPassword) {

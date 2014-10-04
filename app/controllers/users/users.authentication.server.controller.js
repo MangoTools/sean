@@ -24,9 +24,7 @@ exports.signup = function(req, res) {
     req.body.displayName = req.body.firstName + ' ' + req.body.lastName;
     var user = db.User.build(req.body);
 
-    user
-        .save()
-        .done(function(err,user) {
+    user.save().done(function(err,user) {
             if(err){
                 logger.error('Error :' +err);
                 return res.status(400).send({
@@ -168,7 +166,7 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 
             // And save the user
             user.save(function(err) {
-                return done(err, user, '/#!/settings/accounts');
+                return done(err, user, '/settings/accounts');
             });
         } else {
             return done(new Error('User is already connected using this provider'), user);
