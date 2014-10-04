@@ -31,7 +31,9 @@ var validateLocalStrategyPassword = function(password) {
 var cryptPassword =function(user, fn) {
     if (user.password && user.password.length > 6) {
         user.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
-        user.password = user.hashPassword(user.password, user.salt);
+        user.password = user.hashPassword(user.password);
+        console.log( user.salt);
+        console.log( user.password);
     }
     fn(null, user);
 };
@@ -80,7 +82,7 @@ module.exports = function(sequelize, DataTypes) {
                 validate: { isValid: validateLocalStrategyPassword}
             },
             salt: {
-                type: DataTypes.STRING
+                type: DataTypes.BLOB('tiny')
             },
             provider: {
                 type: DataTypes.STRING,
@@ -114,9 +116,9 @@ module.exports = function(sequelize, DataTypes) {
                 authenticate: function(password){
                     return this.password === this.hashPassword(password);
                 },
-                hashPassword: function(password,salt) {
-                    if (salt && password) {
-                        return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
+                hashPassword: function(password) {
+                    if (this.salt && password) {
+                        return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
                     } else {
                         return password;
                     }
