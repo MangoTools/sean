@@ -59,6 +59,10 @@ module.exports = function(sequelize, DataTypes) {
                 defaultValue: '',
                 validate: { isValid: validateLocalStrategyProperty}
             },
+            displayName: {
+                type: DataTypes.STRING,
+                defaultValue: '',
+            },
             email: {
                 type: DataTypes.STRING,
                 defaultValue: '',
@@ -104,9 +108,6 @@ module.exports = function(sequelize, DataTypes) {
         },
         {
             instanceMethods: {
-                getDisplayName: function() {
-                    return [this.firstName, this.lastName].join(' ');
-                },
                 makeSalt: function() {
                     new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
                 },
@@ -145,10 +146,11 @@ module.exports = function(sequelize, DataTypes) {
                 User.hasMany(models.Article);
             },
             hooks: {
-                beforeCreate: cryptPassword, // A verifier si necessaire?
-                beforeUpdate: cryptPassword // Celui-la c sur
-                //beforeBulkCreate: cryptPassword, // A verifier si necessaire?
-                //beforeBulkUpdate: cryptPassword // A verifier si necessaire?
+                beforeCreate: cryptPassword,
+                beforeUpdate: cryptPassword
+                // TODO: If create users as bulk
+                //beforeBulkCreate: cryptPasswordArray,
+                //beforeBulkUpdate: cryptPasswordArray
             }
         });
     return User;
