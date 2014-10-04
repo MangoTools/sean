@@ -3,7 +3,9 @@
 /**
  * Module dependencies.
  */
-var db = require('../../config/sequelize'),
+
+var _ = require('lodash'),
+    db = require('../../config/sequelize'),
     errorHandler = require('./errors');
 
 /**
@@ -40,7 +42,7 @@ exports.update = function(req, res) {
 
 	article = _.extend(article, req.body);
 
-	article.save(function(err) {
+	article.save().done(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -57,7 +59,7 @@ exports.update = function(req, res) {
 exports.delete = function(req, res) {
 	var article = req.article;
 
-	article.remove(function(err) {
+	article.destroy().done(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
