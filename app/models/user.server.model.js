@@ -129,9 +129,9 @@ module.exports = function(sequelize, DataTypes) {
                     var _this = this;
                     var possibleUsername = username + (suffix || '');
 
-                    _this.findOne({
+                    _this.find({
                         username: possibleUsername
-                    }, function (err, user) {
+                    }).done(function (err, user) {
                         if (!err) {
                             if (!user) {
                                 callback(possibleUsername);

@@ -122,10 +122,10 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 
         // Define a search query to find existing user with current provider profile
         var searchQuery = {
-            $or: [mainProviderSearchQuery, additionalProviderSearchQuery]
+            where: bd.or(mainProviderSearchQuery, additionalProviderSearchQuery)
         };
 
-        User.findOne(searchQuery, function(err, user) {
+        User.find(searchQuery).done(function(err, user) {
             if (err) {
                 return done(err);
             } else {
@@ -144,7 +144,7 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
                         });
 
                         // And save the user
-                        user.save(function(err) {
+                        user.save().done(function(err) {
                             return done(err, user);
                         });
                     });
@@ -167,7 +167,7 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
             user.markModified('additionalProvidersData');
 
             // And save the user
-            user.save(function(err) {
+            user.save().done(function(err) {
                 return done(err, user, '/#!/settings/accounts');
             });
         } else {
