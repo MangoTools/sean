@@ -21,7 +21,7 @@ exports.signup = function(req, res) {
     req.body.provider = 'local';
     req.body.roleBitMask = roleManager.userRoles.user.bitMask;
     req.body.roleTitle   = roleManager.userRoles.user.title;
-
+    req.body.displayName = req.body.firstName + ' ' + req.body.lastName;
     var user = db.User.build(req.body);
 
     user
@@ -191,18 +191,20 @@ exports.removeOAuthProvider = function(req, res, next) {
             // Then tell mongoose that we've updated the additionalProvidersData field
             user.markModified('additionalProvidersData');
         }
-        user.save().success(function(){
-            req.login(user, function(err) {
-                if (err) {
-                    res.status(400).send(err);
-                } else {
-                    res.jsonp(user);
-                }
-            });
-        }).error(function(err){
-            return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
-            });
+        user.save().done(function(err,user){
+            if(err){
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else{
+                req.login(user, function(err) {
+                    if (err) {
+                        res.status(400).send(err);
+                    } else {
+                        res.jsonp(user);
+                    }
+                });
+            }
         });
     }
 };
