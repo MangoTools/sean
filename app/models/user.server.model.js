@@ -32,8 +32,6 @@ var cryptPassword =function(user, fn) {
     if (user.password && user.password.length > 6) {
         user.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
         user.password = user.hashPassword(user.password);
-        console.log( user.salt);
-        console.log( user.password);
     }
     fn(null, user);
 };
