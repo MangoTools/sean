@@ -14,12 +14,13 @@ exports.create = function(req, res) {
 
 	article.UserId = req.user.id;
 
-    db.Article.create(req.body).success(function(article){
-            return res.jsonp(article);
-    }).error(function(err){
-        return res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
-        });
+    db.Article.create(req.body).done(function(err, article){
+        if(err){
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        }
+        return res.jsonp(article);
     });
 };
 
@@ -34,6 +35,7 @@ exports.read = function(req, res) {
 * Update a article
 */
 exports.update = function(req, res) {
+
 	var article = req.article;
 
 	article = _.extend(article, req.body);
@@ -70,7 +72,7 @@ exports.delete = function(req, res) {
 * List of Articles
 */
 exports.list = function(req, res) {
-	Article.find().sort('-created').populate('user', 'displayName').exec(function(err, articles) {
+    db.Article.findAll({ include: [{ model: db.User, attributes: ['displayName'] }], order: 'created' }).done(function(err, articles) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -85,7 +87,7 @@ exports.list = function(req, res) {
 * Article middleware
 */
 exports.articleByID = function(req, res, next, id) {
-	Article.findById(id).populate('user', 'displayName').exec(function(err, article) {
+    db.Article.find({where: { id: id }, include: [ { model: db.User, attributes: ['displayName'] } ] }).done(function(err, article) {
 		if (err) return next(err);
 		if (!article) return next(new Error('Failed to load article ' + id));
 		req.article = article;
