@@ -7,10 +7,15 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 		$urlRouterProvider.otherwise('/');
 
 		// Home state routing
+        var access = roleManager.accessLevels;
+
 		$stateProvider.
 		state('home', {
 			url: '/',
-			templateUrl: 'modules/core/views/home.client.view.html'
+			templateUrl: 'modules/core/views/home.client.view.html',
+                data : {
+                    access : access.public
+                }
 		});
 	}
 ]);

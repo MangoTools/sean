@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles',
-	function($scope, $stateParams, $location, Authentication, Articles) {
+angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication','Message', 'Articles',
+	function($scope, $stateParams, $location, Authentication,Message, Articles) {
+        var content = 'Article';
 		$scope.authentication = Authentication;
 
 		$scope.create = function() {
@@ -10,12 +11,13 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 				content: this.content
 			});
 			article.$save(function(response) {
+                Message.success(content,content +'successfully created');
 				$location.path('articles/' + response.id);
 
 				$scope.title = '';
 				$scope.content = '';
 			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
+                Message.error(content,errorResponse.data.message);
 			});
 		};
 
@@ -39,9 +41,10 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			var article = $scope.article;
 
 			article.$update(function() {
+                Message.success(content,content +'successfully updated');
 				$location.path('articles/' + article.id);
 			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
+                Message.error(content,errorResponse.data.message);
 			});
 		};
 

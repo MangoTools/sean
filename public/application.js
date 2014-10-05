@@ -11,6 +11,27 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 	}
 ]);
 
+angular.module(ApplicationConfiguration.applicationModuleName).run(['Message','Authentication','Authorization','$rootScope','$state',
+    function(Message,Authentication,Authorization,$rootScope,$state){
+
+
+        $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
+            if(!('data' in toState) || !('access' in toState.data)){
+
+                event.preventDefault();
+                Message.error('Routing Error','Access undefined for this state');
+            }
+            else if (!Authorization.authorize(toState.data.access)) {
+                Message.error('Access Restricted', 'Seems like you tried accessing a route you don\'t have access to...');
+                event.preventDefault();
+                if(Authentication.user.role.title ==='public')  $state.go('signIn');
+            }
+        });
+    }
+]);
+
+
+
 //Then define the init function for starting up the application
 angular.element(document).ready(function() {
 	//Fixing facebook bug with redirect
