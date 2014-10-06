@@ -197,8 +197,7 @@ exports.changePassword = function(req, res, next) {
                     if (!err && user) {
                         if (user.authenticate(passwordDetails.currentPassword)) {
                             if (passwordDetails.newPassword === passwordDetails.verifyPassword) {
-                                user.password = passwordDetails.newPassword;
-
+                                user.password = user.hashPassword(passwordDetails.newPassword);
                                 user.save().done(function(err) {
                                     if (err) {
                                         return res.status(400).send({

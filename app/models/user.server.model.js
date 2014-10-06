@@ -146,11 +146,9 @@ module.exports = function(sequelize, DataTypes) {
                 User.hasMany(models.Article);
             },
             hooks: {
-                beforeCreate: cryptPassword,
-                beforeUpdate: cryptPassword
+                beforeCreate: cryptPassword
                 // TODO: If create users as bulk
                 //beforeBulkCreate: cryptPasswordArray,
-                //beforeBulkUpdate: cryptPasswordArray
             }
         });
     return User;
