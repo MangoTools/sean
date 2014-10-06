@@ -22,17 +22,17 @@ describe('Article Model Unit Tests:', function() {
 			displayName: 'Full Name',
 			email: 'test@test.com',
 			username: 'username',
-			password: 'password'
+			password: 'password',
+            provider: 'local'
 		});
-
-		user.save().done(function(err, user) {
+		user.save().done(function(err) {
 			article = db.Article.build({
 				title: 'Article Title',
 				content: 'Article Content',
 				user: user
 			});
-
-			done();
+            console.log(err);
+			done(err);
 		});
 	});
 
@@ -55,8 +55,8 @@ describe('Article Model Unit Tests:', function() {
 	});
 
 	afterEach(function(done) {
-		Article.destroy().exec();
-		User.destroy().exec();
+		db.Article.destroy().done();
+		db.User.destroy().done();
 		done();
 	});
 });

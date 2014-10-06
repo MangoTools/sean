@@ -3,16 +3,18 @@
 /**
  * Module dependencies.
  */
+process.env.NODE_ENV = "test";
 var applicationConfiguration = require('./config/config');
 
 // Karma configuration
 module.exports = function(config) {
-	config.set({
+    config.set({
 		// Frameworks to use
 		frameworks: ['jasmine'],
 
 		// List of files / patterns to load in the browser
 		files: applicationConfiguration.assets.lib.js.concat(applicationConfiguration.assets.js, applicationConfiguration.assets.tests),
+        //files: ['app/tests/article.server.model.test.js'],
 
 		// Test results reporter to use
 		// Possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
