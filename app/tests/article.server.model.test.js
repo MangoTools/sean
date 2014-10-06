@@ -25,14 +25,13 @@ describe('Article Model Unit Tests:', function() {
 			password: 'password',
             provider: 'local'
 		});
-		user.save().done(function(err) {
+        user.save().done(function(err) {
 			article = db.Article.build({
 				title: 'Article Title',
 				content: 'Article Content',
 				user: user
 			});
-            console.log(err);
-			done(err);
+            done(err);
 		});
 	});
 
@@ -48,15 +47,15 @@ describe('Article Model Unit Tests:', function() {
 			article.title = '';
 
 			return article.save().done(function(err, article) {
-				should.exist(err);
+                should.exist(err);
 				done();
 			});
 		});
 	});
 
 	afterEach(function(done) {
-		db.Article.destroy().done();
-		db.User.destroy().done();
+        db.Article.destroy().done(function(err){/*console.log(err);*/});
+		db.User.destroy().done(function(err){/*console.log(err);*/});
 		done();
 	});
 });

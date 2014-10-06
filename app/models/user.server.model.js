@@ -9,7 +9,7 @@ var crypto = require('crypto');
  * A Validation function for local strategy properties
  */
 var validateLocalStrategyProperty = function(property) {
-    if( ((this.provider !== 'local' && !this.updated) || property.length) === false ){
+    if( ((this.provider !== 'local' && !this.updated) || property.length!==0) === false ){
         throw new Error('Local strategy failed');
     }
 };
@@ -61,7 +61,7 @@ module.exports = function(sequelize, DataTypes) {
             },
             displayName: {
                 type: DataTypes.STRING,
-                defaultValue: '',
+                defaultValue: ''
             },
             email: {
                 type: DataTypes.STRING,
