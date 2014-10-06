@@ -52,7 +52,6 @@
             };
             bitMask = (intCode << 1 ).toString(2)
         }
-        console.log(userRoles)
         return userRoles;
     }
 
@@ -94,7 +93,6 @@
                 };
             }
         }
-        console.log(accessLevels)
         return accessLevels;
     }
 
