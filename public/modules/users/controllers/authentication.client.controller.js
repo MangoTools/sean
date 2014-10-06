@@ -11,7 +11,7 @@ angular.module('users').controller('AuthenticationController', ['$scope','$rootS
 				// If successful we assign the response to the global user model
                 Storage.set('auth_token',response);
                 $rootScope.$broadcast('Auth');
-                Message.success('Login','Welcome '+ response.displayName);
+                Message.success('Login','Welcome '+ response.user.displayName);
 				// And redirect to the index page
 				$location.path('/');
 			}).error(function(response) {
@@ -24,7 +24,7 @@ angular.module('users').controller('AuthenticationController', ['$scope','$rootS
 				// If successful we assign the response to the global user model
                 Storage.set('auth_token',response);
                 $rootScope.$broadcast('Auth');
-                Message.success('Login','Welcome '+ response.displayName);
+                Message.success('Login','Welcome '+ response.user.displayName);
 				// And redirect to the index page
 				$location.path('/');
 			}).error(function(response) {
