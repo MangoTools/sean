@@ -55,8 +55,8 @@ describe('Article Model Unit Tests:', function() {
 	});
 
 	afterEach(function(done) {
-		Article.destroy().exec();
-		User.destroy().exec();
+		db.Article.destroy().done();
+		db.User.destroy().done();
 		done();
 	});
 });
