@@ -16,7 +16,7 @@ var user, article;
  */
 describe('Article Model Unit Tests:', function() {
 	beforeEach(function(done) {
-		user = new User({
+		user = db.User.build({
 			firstName: 'Full',
 			lastName: 'Name',
 			displayName: 'Full Name',
@@ -25,8 +25,8 @@ describe('Article Model Unit Tests:', function() {
 			password: 'password'
 		});
 
-		user.save(function() {
-			article = new Article({
+		user.save().done(function(err, user) {
+			article = db.Article.build({
 				title: 'Article Title',
 				content: 'Article Content',
 				user: user
@@ -38,7 +38,7 @@ describe('Article Model Unit Tests:', function() {
 
 	describe('Method Save', function() {
 		it('should be able to save without problems', function(done) {
-			return article.save(function(err) {
+			return article.save().done(function(err, article) {
 				should.not.exist(err);
 				done();
 			});
@@ -47,7 +47,7 @@ describe('Article Model Unit Tests:', function() {
 		it('should be able to show an error when try to save without title', function(done) {
 			article.title = '';
 
-			return article.save(function(err) {
+			return article.save().done(function(err, article) {
 				should.exist(err);
 				done();
 			});
@@ -55,8 +55,8 @@ describe('Article Model Unit Tests:', function() {
 	});
 
 	afterEach(function(done) {
-		Article.remove().exec();
-		User.remove().exec();
+		Article.destroy().exec();
+		User.destroy().exec();
 		done();
 	});
 });
