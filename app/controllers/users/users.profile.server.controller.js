@@ -33,7 +33,7 @@ exports.update = function(req, res) {
                     if (err) {
                         res.status(400).send(err);
                     } else {
-                        res.jsonp({user: user, token: tokenService.issueToken(user.id)});
+                        res.jsonp({user: user, token: tokenService.issueToken(user)});
                     }
                 });
             }
@@ -49,5 +49,5 @@ exports.update = function(req, res) {
  * Send User
  */
 exports.me = function(req, res) {
-    res.jsonp({user: user, token: tokenService.issueToken(user.id)} || null);
+    res.jsonp({user: user, token: tokenService.issueToken(user)} || null);
 };

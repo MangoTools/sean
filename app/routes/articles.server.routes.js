@@ -9,7 +9,7 @@ var users = require('../../app/controllers/users'),
 module.exports = function(app) {
 	// Article Routes
 	app.route('/api/articles')
-		.get(users.isAuthorized('admin'),articles.list)
+		.get(users.isAuthorized('user'),articles.list)
 		.post(users.isAuthenticated, articles.create);
 
 	app.route('/api/articles/:articleId')

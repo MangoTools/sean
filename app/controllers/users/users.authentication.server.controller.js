@@ -48,7 +48,7 @@ exports.signup = function(req, res) {
                 } else {
                     logger.debug('New User (local) : { id: ' + user.id + ' username: ' + user.username + ' }');
 
-                    res.jsonp({user: user, token: tokenService.issueToken(user.id)});
+                    res.jsonp({user: user, token: tokenService.issueToken(user)});
                 }
             });
             }
@@ -73,7 +73,7 @@ exports.signin = function(req, res, next) {
                 if (err) {
                     res.status(400).send(err);
                 } else {
-                    res.jsonp({user: user, token: tokenService.issueToken(user.id)});
+                    res.jsonp({user: user, token: tokenService.issueToken(user)});
                 }
             });
         }
@@ -207,8 +207,7 @@ exports.removeOAuthProvider = function(req, res, next) {
                     if (err) {
                         res.status(400).send(err);
                     } else {
-                        var token = jwt.sign(user, config.secret, { expiresInMinutes: 60*5 });
-                        res.jsonp(token);
+                        res.jsonp({user: user, token: tokenService.issueToken(user)});
                     }
                 });
             }

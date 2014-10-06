@@ -13,7 +13,7 @@ var _ = require('lodash'),
  */
 exports.userByID = function(req, res, next, id) {
 
-	db.User.find({where : { id: id }}).done(function(err,user){
+    db.User.find({where : { id: id }}).done(function(err,user){
         if (err) return next(err);
         if (!user) return next(new Error('Failed to load User ' + id));
         req.profile = user;
@@ -65,19 +65,17 @@ exports.isAuthenticated = function(req, res, next) {
  * User authorizations routing middleware
  */
 exports.isAuthorized = function(accessLevel) {
-	var _this = this;
+    var _this = this;
 
     return function(req, res, next) {
         _this.isAuthenticated(req, res, function() {
-            db.User.find({where: { id: req.user }}).done(function(err,user){
-                if(roleManager.accessLevels[accessLevel].bitMask & user.roleBitMask){
-                    next()
-                }else{
-                    return res.status(403).send({
-                        message: 'User is not authorized'
-                    });
-                }
-            });
+            if(roleManager.accessLevels[accessLevel].bitMask & req.user.roleBitMask){
+                next()
+            }else{
+                return res.status(403).send({
+                    message: 'User is not authorized'
+                });
+            }
         });
     };
 };
