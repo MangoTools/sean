@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication','Message', 'Articles',
-	function($scope, $stateParams, $location, Authentication,Message, Articles) {
+angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location','User', 'Authentication','Message', 'Articles',
+	function($scope, $stateParams, $location,User, Authentication,Message, Articles) {
         var content = 'Article';
-		$scope.authentication = Authentication;
+		$scope.user = User.get();
 
 		$scope.create = function() {
 			var article = new Articles({
