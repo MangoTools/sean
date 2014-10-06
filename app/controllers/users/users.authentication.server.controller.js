@@ -7,6 +7,7 @@ var _ = require('lodash'),
     errorHandler = require('../errors'),
     roleManager = require('../../../config/roleManager'),
     passport = require('passport'),
+    tokenService = require('../../services/token'),
     db = require('../../../config/sequelize');
 
 /**
@@ -38,13 +39,16 @@ exports.signup = function(req, res) {
             // Remove sensitive data before login
             user.password = undefined;
             user.salt = undefined;
+            user.resetPasswordExpires = undefined;
+            user.resetPasswordToken = undefined;
 
             req.login(user, function(err) {
                 if (err) {
                     res.status(400).send(err);
                 } else {
                     logger.debug('New User (local) : { id: ' + user.id + ' username: ' + user.username + ' }');
-                    res.jsonp(user);
+
+                    res.jsonp({user: user, token: tokenService.issueToken(user.id)});
                 }
             });
             }
@@ -62,12 +66,14 @@ exports.signin = function(req, res, next) {
             // Remove sensitive data before login
             user.password = undefined;
             user.salt = undefined;
+            user.resetPasswordExpires = undefined;
+            user.resetPasswordToken = undefined;
 
             req.login(user, function(err) {
                 if (err) {
                     res.status(400).send(err);
                 } else {
-                    res.jsonp(user);
+                    res.jsonp({user: user, token: tokenService.issueToken(user.id)});
                 }
             });
         }
@@ -201,7 +207,8 @@ exports.removeOAuthProvider = function(req, res, next) {
                     if (err) {
                         res.status(400).send(err);
                     } else {
-                        res.jsonp(user);
+                        var token = jwt.sign(user, config.secret, { expiresInMinutes: 60*5 });
+                        res.jsonp(token);
                     }
                 });
             }

@@ -13,8 +13,8 @@ module.exports = {
 	port: process.env.PORT || 3000,
     modelsDir : rootPath + '/app/models',
 	templateEngine: 'swig',
-	sessionSecret: 'SEAN - Need to be Changed',
-	sessionCollection: 'sessions',
+	secret: 'SEAN - Need to be Changed',
+	//sessionCollection: 'sessions',
 	assets: {
 		lib: {
 			css: [
@@ -31,6 +31,7 @@ module.exports = {
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
                 'public/lib/angularjs-toaster/toaster.js',
                 'public/lib/angular-socket-io/socket.js',
+                'public/lib/angular-local-storage/dist/angular-local-storage.js',
                 'public/lib/socket.io-client/socket.io.js'
 			]
 		},

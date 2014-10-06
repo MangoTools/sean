@@ -1,11 +1,11 @@
 'use strict';
 
-angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication',
-	function($scope, $stateParams, $http, $location, Authentication) {
+angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication','User','Message',
+	function($scope, $stateParams, $http, $location, Authentication,User,Message) {
 		$scope.authentication = Authentication;
 
 		//If user is signed in then redirect back home
-		if ($scope.authentication.user) $location.path('/');
+		if ($scope.authentication.user()) $location.path('/');
 
 		// Submit forgotten password account id
 		$scope.askForPasswordReset = function() {

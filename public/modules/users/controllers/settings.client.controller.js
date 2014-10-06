@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication',
-	function($scope, $http, $location, Users, Authentication) {
-		$scope.user = Authentication.user;
+angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication','User','Message',
+	function($scope, $http, $location, Users, Authentication,User,Message) {
+		$scope.user = User.get();
 
 		// If user is not signed in then redirect back home
 		if (!$scope.user) $location.path('/');
@@ -25,16 +25,18 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 		$scope.removeUserSocialAccount = function(provider) {
 			$scope.success = $scope.error = null;
 
-			$http.delete('/users/accounts', {
+			$http.delete('api/users/accounts', {
 				params: {
 					provider: provider
 				}
 			}).success(function(response) {
 				// If successful show success message and clear form
 				$scope.success = true;
-				$scope.user = Authentication.user = response;
+                Storage.set('auth_token',response);
+                $rootScope.$broadcast('Auth');
+                Message.success('Remove Social Account','Successfully removed social provider.');
 			}).error(function(response) {
-				$scope.error = response.message;
+                Message.error('Failed to Remove Social Account',response.message);
 			});
 		};
 
@@ -46,9 +48,11 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 	
 				user.$update(function(response) {
 					$scope.success = true;
-					Authentication.user = response;
+                    Storage.set('auth_token',response);
+                    $rootScope.$broadcast('Auth');
+                    Message.success('Update Profile','Successfully updated your profile.');
 				}, function(response) {
-					$scope.error = response.data.message;
+                    Message.error('Failed to Update Profile',response.message);
 				});
 			} else {
 				$scope.submitted = true;
@@ -59,12 +63,13 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 		$scope.changeUserPassword = function() {
 			$scope.success = $scope.error = null;
 
-			$http.post('/users/password', $scope.passwordDetails).success(function(response) {
+			$http.post('api/users/password', $scope.passwordDetails).success(function(response) {
 				// If successful show success message and clear form
 				$scope.success = true;
 				$scope.passwordDetails = null;
+                Message.success('Change Password','Successfully changed  your password.');
 			}).error(function(response) {
-				$scope.error = response.message;
+                Message.error('Failed to change password',response.message);
 			});
 		};
 	}

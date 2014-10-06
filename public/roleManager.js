@@ -23,8 +23,7 @@
          'user' and 'admin' have access to the access level 'user'.
          */
         accessLevels : {
-            'public' : "*",
-            'anon': ['public'],
+            'anon':  ['public','user','admin'],
             'user' : ['user','admin'],
             'admin': ['admin']
         }
@@ -53,6 +52,7 @@
             };
             bitMask = (intCode << 1 ).toString(2)
         }
+        console.log(userRoles)
         return userRoles;
     }
 
@@ -94,6 +94,7 @@
                 };
             }
         }
+        console.log(accessLevels)
         return accessLevels;
     }
 

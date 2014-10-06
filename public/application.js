@@ -11,9 +11,8 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 	}
 ]);
 
-angular.module(ApplicationConfiguration.applicationModuleName).run(['Message','Authentication','Authorization','$rootScope','$state',
-    function(Message,Authentication,Authorization,$rootScope,$state){
-
+angular.module(ApplicationConfiguration.applicationModuleName).run(['Message','Authentication','$rootScope','$state',
+    function(Message,Authentication,$rootScope,$state){
 
         $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
             if(!('data' in toState) || !('access' in toState.data)){
@@ -21,10 +20,17 @@ angular.module(ApplicationConfiguration.applicationModuleName).run(['Message','A
                 event.preventDefault();
                 Message.error('Routing Error','Access undefined for this state');
             }
-            else if (!Authorization.authorize(toState.data.access)) {
+            else if (!Authentication.authorize(toState.data.access)) {
                 Message.error('Access Restricted', 'Seems like you tried accessing a route you don\'t have access to...');
                 event.preventDefault();
-                if(Authentication.user.role.title ==='public')  $state.go('signIn');
+
+                if(fromState.url === '^') {
+                    if(Authentication.isAuthenticated()) {
+                        $state.go('home');
+                    } else {
+                        $state.go('signin');
+                    }
+                }
             }
         });
     }

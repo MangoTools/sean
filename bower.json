@@ -13,6 +13,7 @@
 		"angular-ui-router": "~0.2.10",
         "socket.io-client": "~1.1.0",
         "angular-socket-io": "~0.6.0",
-        "angularjs-toaster": "~0.4.8"
+        "angularjs-toaster": "~0.4.8",
+        "angular-local-storage": "~0.0.7"
 	}
 }

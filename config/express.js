@@ -8,9 +8,9 @@ var express = require('express'),
     socketio = require('socket.io'),
 	bodyParser = require('body-parser'),
 	session = require('express-session'),
+    expressJwt = require('express-jwt'), //https://npmjs.org/package/express-jwt
 	compress = require('compression'),
 	methodOverride = require('method-override'),
-	cookieParser = require('cookie-parser'),
 	helmet = require('helmet'),
 	passport = require('passport'),
     db = require('./sequelize'),
@@ -19,10 +19,10 @@ var express = require('express'),
 	consolidate = require('consolidate'),
 	path = require('path');
 
-// initialize session store
-var SequelizeStore = require('connect-sequelize')(session),
-    modelName = 'Session',
-    options = {};
+//// initialize session store
+//var SequelizeStore = require('connect-sequelize')(session),
+//    modelName = 'Session',
+//    options = {};
 
 
 
@@ -76,6 +76,8 @@ module.exports = function() {
 		app.locals.cache = 'memory';
 	}
 
+    app.use('/api', expressJwt({secret: config.secret}));
+
     // Request body parsing middleware should be above methodOverride
 	app.use(bodyParser.urlencoded({
 		extended: true
@@ -87,18 +89,18 @@ module.exports = function() {
 	app.enable('jsonp callback');
 
 	// CookieParser should be above session
-	app.use(cookieParser());
+	//app.use(cookieParser());
 
 	// Express SQL session storage
 
 
-	app.use(session({
-		saveUninitialized: true,
-		resave: true,
-		secret: config.sessionSecret,
-        store: new SequelizeStore(db.sequelize, options, modelName),
-        proxy: false // if you do SSL outside of node.
-	}));
+	//app.use(session({
+	//	saveUninitialized: true,
+	//	resave: true,
+	//	secret: config.sessionSecret,
+     //   store: new SequelizeStore(db.sequelize, options, modelName),
+     //   proxy: false // if you do SSL outside of node.
+	//}));
 
 	// use passport session
 	app.use(passport.initialize());

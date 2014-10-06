@@ -1,15 +1,34 @@
 'use strict';
 
 // Authentication service for user variables
-angular.module('users').factory('Authentication', [
+angular.module('users').factory('Authentication', ['$rootScope','Storage',
+    function($rootScope,Storage){
 
-	function() {
-		var _this = this;
+        var currentUser = Storage.get('auth_token') !== null ? Storage.get('auth_token').user : { username: '', roleBitMask: roleManager.userRoles.public.bitMask , roleTitle: roleManager.userRoles.public.title};
 
-		_this._data = {
-			user: window.user
-		};
+        $rootScope.$on('Auth',function(){
+            currentUser = Storage.get('auth_token') !== null ? Storage.get('auth_token').user : { username: '', roleBitMask: roleManager.userRoles.public.bitMask , roleTitle: roleManager.userRoles.public.title};
+        });
 
-		return _this._data;
-	}
+        var accessLevels = roleManager.accessLevels
+            , userRoles = roleManager.userRoles;
+
+        return {
+            authorize: function(accessLevel, role) {
+                if(role === undefined) {
+
+                    role = angular.copy(currentUser.roleBitMask);
+                }
+                return accessLevel.bitMask & role;
+            },
+            isAuthenticated : function() {
+                return Storage.get('auth_token');
+            },
+            accessLevels: accessLevels,
+            userRoles: userRoles
+
+        }
+
+    }
 ]);
+

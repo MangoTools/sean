@@ -9,6 +9,7 @@ var _ = require('lodash'),
     config = require('../../../config/config'),
     nodemailer = require('nodemailer'),
     db = require('../../../config/sequelize'),
+    tokenService = require('../../services/token'),
     async = require('async'),
     crypto = require('crypto');
 
@@ -135,7 +136,7 @@ exports.reset = function(req, res, next) {
                                         res.status(400).send(err);
                                     } else {
                                         // Return authenticated user
-                                        res.jsonp(user);
+                                        res.jsonp({user: user, token: tokenService.issueToken(user.id)});
 
                                         done(err, user);
                                     }

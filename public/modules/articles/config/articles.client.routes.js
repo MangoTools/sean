@@ -10,7 +10,7 @@ angular.module('articles').config(['$stateProvider',
 			url: '/articles',
 			templateUrl: 'modules/articles/views/list-articles.client.view.html',
                 data : {
-                    access : access.public
+                    access : access.user
                 }
 		}).
 		state('createArticle', {
@@ -24,7 +24,7 @@ angular.module('articles').config(['$stateProvider',
 			url: '/articles/:articleId',
 			templateUrl: 'modules/articles/views/view-article.client.view.html',
                 data : {
-                    access : access.public
+                    access : access.user
                 }
 		}).
 		state('editArticle', {
