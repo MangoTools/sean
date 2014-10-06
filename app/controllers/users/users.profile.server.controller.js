@@ -37,6 +37,8 @@ exports.update = function(req, res) {
             // For security measurement we remove the roles from the req.body object
             delete req.body.roleTitle;
             delete req.body.roleBitMask;
+            delete req.body.password;
+            delete req.body.salt;
 
             // Merge existing user
             user = _.extend(user, req.body);
