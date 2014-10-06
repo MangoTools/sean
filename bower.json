@@ -1,19 +1,19 @@
 {
-	"name": "seanjs",
-	"version": "0.0.1",
-	"description": "Fullstack JavaScript with Sequelize, Express, AngularJS, and Node.js.",
-	"dependencies": {
-		"bootstrap": "~3.2",
-		"angular": "~1.2",
-		"angular-resource": "~1.2",
-		"angular-animate": "~1.2",
-		"angular-mocks": "~1.2",
-		"angular-bootstrap": "~0.11.0",
-		"angular-ui-utils": "~0.1.1",
-		"angular-ui-router": "~0.2.10",
-        "socket.io-client": "~1.1.0",
-        "angular-socket-io": "~0.6.0",
-        "angularjs-toaster": "~0.4.8",
-        "angular-local-storage": "~0.0.7"
-	}
+  "name": "seanjs",
+  "version": "0.0.1",
+  "description": "Fullstack JavaScript with Sequelize, Express, AngularJS, and Node.js.",
+  "dependencies": {
+    "bootstrap": "~3.2",
+    "angular": "~1.2",
+    "angular-resource": "~1.2",
+    "angular-animate": "~1.2",
+    "angular-mocks": "~1.2",
+    "angular-bootstrap": "~0.11.0",
+    "angular-ui-utils": "~0.1.1",
+    "angular-ui-router": "~0.2.10",
+    "socket.io-client": "~1.1.0",
+    "angular-socket-io": "~0.6.0",
+    "angularjs-toaster": "~0.4.8",
+    "angular-local-storage": "~0.1.0"
+  }
 }
