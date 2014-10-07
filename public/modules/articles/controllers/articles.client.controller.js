@@ -2,7 +2,6 @@
 
 angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location','User', 'Authentication','Message', 'Articles',
 	function($scope, $stateParams, $location,User, Authentication,Message, Articles) {
-        var content = 'Article';
 		$scope.user = User.get();
 
 		$scope.create = function() {
@@ -11,13 +10,13 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 				content: this.content
 			});
 			article.$save(function(response) {
-                Message.success(content,content +'successfully created');
+                Message.success('Article','Article successfully created');
 				$location.path('articles/' + response.id);
 
 				$scope.title = '';
 				$scope.content = '';
 			}, function(errorResponse) {
-                Message.error(content,errorResponse.data.message);
+                Message.error('Article',errorResponse.data.message);
 			});
 		};
 
@@ -41,10 +40,10 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			var article = $scope.article;
 
 			article.$update(function() {
-                Message.success(content,content +'successfully updated');
+                Message.success('Article','Articlesuccessfully updated');
 				$location.path('articles/' + article.id);
 			}, function(errorResponse) {
-                Message.error(content,errorResponse.data.message);
+                Message.error('Article',errorResponse.data.message);
 			});
 		};
 

@@ -51,7 +51,6 @@ angular.module('core').service('Menus', [
 				items: [],
 				shouldRender: shouldRender
 			};
-
 			// Return the menu object
 			return this.menus[menuId];
 		};
