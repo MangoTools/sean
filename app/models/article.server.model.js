@@ -12,7 +12,8 @@ module.exports = function(sequelize, DataTypes) {
         title: {
             type: DataTypes.STRING,
             defaultValue: '',
-            allowNull: false
+            allowNull: false,
+            validate: { notEmpty: true}
         },
         content: {
             type: DataTypes.TEXT,

@@ -41,9 +41,8 @@ describe('User Model Unit Tests:', function() {
 	describe('Method Save', function() {
 		it('should begin with no users', function(done) {
 
-			db.Users.find({}).done(function(err, users) {
-
-				users.should.have.length(0);
+			db.User.findAll().done(function(err, users) {
+                users.should.have.length(0);
 				done();
 			});
 		});
@@ -53,11 +52,13 @@ describe('User Model Unit Tests:', function() {
 		});
 
 		it('should fail to save an existing user again', function(done) {
-			user.save().done();
-			return user2.save().done(function(err) {
-				should.exist(err);
-				done();
-			});
+			user.save().done(function(err, user){
+                user2.save().done(function(err) {
+                    should.exist(err);
+                    done();
+                });
+            });
+
 		});
 
 		it('should be able to show an error when try to save without first name', function(done) {
@@ -70,7 +71,7 @@ describe('User Model Unit Tests:', function() {
 	});
 
 	after(function(done) {
-		db.User.destroy().done();
+		db.User.destroy().done(function(err){/*console.log(err);*/});
 		done();
 	});
 });
