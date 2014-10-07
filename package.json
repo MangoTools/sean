@@ -1,12 +1,12 @@
 {
-  "name": "meanjs",
-  "description": "Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js.",
-  "version": "0.3.2",
+  "name": "sean",
+  "description": "Full-Stack JavaScript with Sequelize, Express, AngularJS, and Node.js.",
+  "version": "0.1.0",
   "private": false,
-  "author": "https://github.com/meanjs/mean/graphs/contributors",
+  "author": "https://github.com/MangoTools/sean/graphs/contributors",
   "repository": {
     "type": "git",
-    "url": "https://github.com/meanjs/mean.git"
+    "url": "https://github.com/MangoTools/sean.git"
   },
   "engines": {
     "node": "0.10.x",
@@ -34,7 +34,6 @@
     "helmet": "~0.4.0",
     "lodash": "~2.4.1",
     "method-override": "~2.1.2",
-    "mongoose": "latest",
     "morgan": "^1.3.2",
     "nodemailer": "~1.1.1",
     "passport": "~0.2.0",
