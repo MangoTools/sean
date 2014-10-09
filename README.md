@@ -115,9 +115,11 @@ YOU NEED TO CHANGE YOUR SESSION SECRET BEFORE GOING IN PRODUCTION to avoid secur
 
 
 ## Credits
-Inspired by the great work of [Madhusudhan Srinivasa](https://github.com/madhums/)
-The MEAN name was coined by [Valeri Karpov](http://blog.mongodb.org/post/49262866911/the-mean-stack-mongodb-expressjs-angularjs-and)
+Inspired by the great work of the [MEANJS](http://meanjs.org) team.
 
+and indirectly by [Madhusudhan Srinivasa](https://github.com/madhums/)
+The MEAN name was coined by [Valeri Karpov](http://blog.mongodb.org/post/49262866911/the-mean-stack-mongodb-expressjs-angularjs-and)
+The SEAN name is coined by [The Mango Tools team](http://mango.tools/sean)
 ## License
 (The MIT License)
 
