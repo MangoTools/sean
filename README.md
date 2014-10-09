@@ -1,22 +1,21 @@
 sean
 ====
 
-:exclamation: This project is on early stage. It is still not functional. Please come back in a week!
 
-SEAN is an opinionated fullstack javascript framework based on SQL (sequelize Express Angular and Node).
-
+SEAN is an full-stack javascript open-source framework based on SQL (Sequelize Express Angular and Node).
+It provides everything needed  to build applications with [Sequilize](http://www.sequelize.org/), [Node.js](http://www.nodejs.org/), [Express](http://expressjs.com/), and [AngularJS](http://angularjs.org/).
 This project  found it's root on [MEANJS](http://meanjs.org) project.
 
-This is a great tool that we love to use, but as we need a relational database for some of our projects, we decided to make our own fork using Sequelize instead of mongo-db.
+This is a great tool that we love to use, but as we need a relational database for some of our projects, we decided to make our own fork using Sequelize and Postgres instead of Mongo db.
 
-
-
-
-MEAN.JS is a full-stack JavaScript open-source solution, which provides a solid starting point for [MongoDB](http://www.mongodb.org/), [Node.js](http://www.nodejs.org/), [Express](http://expressjs.com/), and [AngularJS](http://angularjs.org/) based applications. The idea is to solve the common issues with connecting those frameworks, build a robust framework to support daily development needs, and help developers use better practices while working with popular JavaScript components.
+ The idea is to solve the common issues with connecting those frameworks, build a robust framework to support daily development needs, and help developers use better practices while working with popular JavaScript components.
+ 
+But That's not all SEAN natively implement web-token authentication and ACL based authorization both on Front and Backend as well as [Socket.io](http://socket.io/). Winston logger is as well implemented to kepp track with what is going on in your app.
+Simply use the logger class from anywhere in your app to get nice formatted output. you can redirect your logs in files for production too.
 
 ## Before You Begin
-Before you begin we recommend you read about the basic building blocks that assemble a MEAN.JS application:
-* MongoDB - Go through [MongoDB Official Website](http://mongodb.org/) and proceed to their [Official Manual](http://docs.mongodb.org/manual/), which should help you understand NoSQL and MongoDB better.
+Before you begin we recommend you read about the basic building blocks that assemble a SEAN application:
+* Sequelize - Go through [Sequilize Official Website](http://sequelize.org/) and looking at their API documentation.
 * Express - The best way to understand express is through its [Official Website](http://expressjs.com/), particularly [The Express Guide](http://expressjs.com/guide.html); you can also go through this [StackOverflow Thread](http://stackoverflow.com/questions/8144214/learning-express-for-node-js) for more resources.
 * AngularJS - Angular's [Official Website](http://angularjs.org/) is a great starting point. You can also use [Thinkster Popular Guide](http://www.thinkster.io/), and the [Egghead Videos](https://egghead.io/).
 * Node.js - Start by going through [Node.js Official Website](http://nodejs.org/) and this [StackOverflow Thread](http://stackoverflow.com/questions/2353818/how-do-i-get-started-with-node-js), which should get you going with the Node.js platform in no time.
@@ -25,7 +24,7 @@ Before you begin we recommend you read about the basic building blocks that asse
 ## Prerequisites
 Make sure you have installed all these prerequisites on your development machine.
 * Node.js - [Download & Install Node.js](http://www.nodejs.org/download/) and the npm package manager, if you encounter any problems, you can also use this [Github Gist](https://gist.github.com/isaacs/579814) to install Node.js.
-* MongoDB - [Download & Install MongoDB](http://www.mongodb.org/downloads), and make sure it's running on the default port (27017).
+* Postgres / mySQL / any SQL engine - Install your required database engine and checkout later how to set it up
 * Bower - You're going to use the [Bower Package Manager](http://bower.io/) to manage your front-end packages, in order to install it make sure you've installed Node.js and npm, then install bower globally using npm:
 
 ```
@@ -38,28 +37,22 @@ $ npm install -g bower
 $ sudo npm install -g grunt-cli
 ```
 
-## Downloading MEAN.JS
+## Downloading SEAN
 There are several ways you can get the MEAN.JS boilerplate:
 
 ### Yo Generator
-The recommended way would be to use the [Official Yo Generator](http://meanjs.org/generator.html) which will generate the latest stable copy of the MEAN.JS boilerplate and supplies multiple sub-generators to ease your daily development cycles.
+The recommended way would be to use the [Official Yo Generator](https://github.com/MangoTools/generator-sean) which will generate the latest stable copy of the SEANboilerplate and supplies multiple sub-generators to ease your daily development cycles.
 
 ### Cloning The GitHub Repository
-You can also use Git to directly clone the MEAN.JS repository:
+You can also use Git to directly clone the SEAN repository:
 ```
-$ git clone https://github.com/meanjs/mean.git meanjs
+$ git clone  git@github.com:MangoTools/sean.git  sean
 ```
-This will clone the latest version of the MEAN.JS repository to a **meanjs** folder.
+This will clone the latest version of the SEAN repository to a **sean** folder.
 
-### Downloading The Repository Zip File
-Another way to use the MEAN.JS boilerplate is to download a zip copy from the [master branch on github](https://github.com/meanjs/mean/archive/master.zip). You can also do this using `wget` command:
-```
-$ wget https://github.com/meanjs/mean/archive/master.zip -O meanjs.zip; unzip meanjs.zip; rm meanjs.zip
-```
-Don't forget to rename **mean-master** after your project name.
 
 ## Quick Install
-Once you've downloaded the boilerplate and installed all the prerequisites, you're just a few steps away from starting to develop you MEAN application.
+Once you've downloaded the boilerplate and installed all the prerequisites, you're just a few steps away from starting to develop you SEAN application.
 
 The first thing you should do is install the Node.js dependencies. The boilerplate comes pre-bundled with a package.json file that contains the list of modules you need to start your application, to learn more about the modules installed visit the NPM & Package.json section.
 
@@ -74,6 +67,26 @@ This command does a few things:
 * If you're running in a development environment, it will then also install development dependencies needed for testing and running your application.
 * Finally, when the install process is over, npm will initiate a bower installcommand to install all the front-end modules needed for the application
 
+
+## Configure your DB engine
+
+SEAN is relational database  agnostic but there is a couple off steps that needs to be done for your particular Database Engine:
+
+First Edit your configs files in /app/config/env  (development.js,production.js and test.js needs to be edited).
+The following portion of the file is the part you require for database setup
+
+```
+db: {
+       dbName:'sean-dev',
+       username : 'SeanDB',
+       password : 'HU7XQQBNWq',
+       dialect: "postgres", // 'sqlite', 'postgres', 'mariadb','mysql'
+       port : 5432 //    5432 for postgres, 3306 for mysql and mariaDB ,
+    },
+```
+
+Then configure your database engine with the same settings and your are all set ready to go.
+
 ## Running Your Application
 After the install process is over, you'll be able to run your application using Grunt, just run grunt default task:
 
@@ -86,41 +99,20 @@ Your application should run on the 3000 port so in your browser just go to [http
 That's it! your application should be running by now, to proceed with your development check the other sections in this documentation.
 If you encounter any problem try the Troubleshooting section.
 
-## Development and deployment With Docker
+## Session secret.
 
-* Install [Docker](http://www.docker.com/)
-* Install [Fig](https://github.com/orchardup/fig)
-
-* Local development and testing with fig:
-```bash
-$ fig up
+your express session secret is located in /app/config/env/all.js and look like this : 
 ```
-
-* Local development and testing with just Docker:
-```bash
-$ docker build -t mean .
-$ docker run -p 27017:27017 -d --name db mongo
-$ docker run -p 3000:3000 --link db:db_1 mean
-$
+secret: 'SEAN - Need to be Changed'
 ```
+YOU NEED TO CHANGE YOUR SESSION SECRET BEFORE GOING IN PRODUCTION to avoid security issues. In fact do it first thing so your don't forget
 
-* To enable live reload forward 35729 port and mount /app and /public as volumes:
-```bash
-$ docker run -p 3000:3000 -p 35729:35729 -v /Users/mdl/workspace/mean-stack/mean/public:/home/mean/public -v /Users/mdl/workspa/mean-stack/mean/app:/home/mean/app --link db:db_1 mean
-```
-
-## Getting Started With MEAN.JS
-You have your application running but there are a lot of stuff to understand, we recommend you'll go over the [Offical Documentation](http://meanjs.org/docs.html).
-In the docs we'll try to explain both general concepts of MEAN components and give you some guidelines to help you improve your development procees. We tried covering as many aspects as possible, and will keep update it by your request, you can also help us develop the documentation better by checking out the *gh-pages* branch of this repository.
 
 ## Community
-* Use to [Offical Website](http://meanjs.org) to learn about changes and the roadmap.
-* Join #meanjs on freenode.
-* Discuss it in the new [Google Group](https://groups.google.com/d/forum/meanjs)
-* Ping us on [Twitter](http://twitter.com/meanjsorg) and [Facebook](http://facebook.com/meanjs)
 
-## Live Example
-Browse the live MEAN.JS example on [http://meanjs.herokuapp.com](http://meanjs.herokuapp.com).
+* Join #seanJS on freenode.
+* Discuss it in the new [Google Group](https://groups.google.com/d/forum/sean)
+
 
 ## Credits
 Inspired by the great work of [Madhusudhan Srinivasa](https://github.com/madhums/)
