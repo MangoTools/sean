@@ -113,6 +113,13 @@ YOU NEED TO CHANGE YOUR SESSION SECRET BEFORE GOING IN PRODUCTION to avoid secur
 * Join #seanJS on freenode.
 * Discuss it in the new [Google Group](https://groups.google.com/d/forum/sean)
 
+## Next step
+
+Improve testing trough out
+
+## Contribution
+
+You wish to contribute to this generate, no problem keep in touch and we will find ways :)
 
 ## Credits
 Inspired by the great work of the [MEANJS](http://meanjs.org) team.
