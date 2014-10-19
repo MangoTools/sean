@@ -13,6 +13,9 @@ This is a great tool that we love to use, but as we need a relational database f
 But That's not all SEAN natively implement web-token authentication and ACL based authorization both on Front and Backend as well as [Socket.io](http://socket.io/). Winston logger is as well implemented to kepp track with what is going on in your app.
 Simply use the logger class from anywhere in your app to get nice formatted output. you can redirect your logs in files for production too.
 
+Thanks for your support:
+[the Mango Tools team](http://mango.tools)
+
 ## Before You Begin
 Before you begin we recommend you read about the basic building blocks that assemble a SEAN application:
 * Sequelize - Go through [Sequilize Official Website](http://sequelize.org/) and looking at their API documentation.
