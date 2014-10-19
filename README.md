@@ -38,7 +38,7 @@ $ sudo npm install -g grunt-cli
 ```
 
 ## Downloading SEAN
-There are several ways you can get the MEAN.JS boilerplate:
+There are several ways you can get the SEAN boilerplate:
 
 ### Yo Generator
 The recommended way would be to use the [Official Yo Generator](https://github.com/MangoTools/generator-sean) which will generate the latest stable copy of the SEANboilerplate and supplies multiple sub-generators to ease your daily development cycles.

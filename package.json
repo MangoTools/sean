@@ -1,7 +1,7 @@
 {
   "name": "sean",
   "description": "Full-Stack JavaScript with Sequelize, Express, AngularJS, and Node.js.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "author": "https://github.com/MangoTools/sean/graphs/contributors",
   "repository": {
